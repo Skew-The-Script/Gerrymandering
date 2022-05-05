@@ -52,10 +52,11 @@ class BarVis {
             .style("stroke", "red")
             .style("fill", "none");
         vis.svg.append("text")
+            .attr("id", "actualNumLineText")
             .attr("x", vis.x(vis.actualNum))
             .attr("y", 0)
             .text("Actual")
-            .style("stroke", "red")
+            .style("stroke", "red");
 
         vis.wrangleData();
 
@@ -64,8 +65,7 @@ class BarVis {
     wrangleData() {
         let vis = this;
         vis.displayData = [0, 0, 0, 0, 0, 0];
-        // console.log("rows " +vis.rownums);
-        // console.log(vis.data.length);
+
         for (let i = 0; i < vis.data.length; i++){
             if (vis.rownums.includes(i)){
                 vis.displayData[vis.data[i]] += 1;
@@ -76,18 +76,10 @@ class BarVis {
 
     updateVis() {
         let vis = this;
-        // console.log("display data" + vis.displayData);
-        // console.log("m" + d3.max(vis.displayData));
+
         vis.y = d3.scaleLinear()
             .domain([0, d3.max(vis.displayData)])
             .range([vis.height, 0]);
-        //
-        // console.log("applying vis.y")
-        // for (let i = 0; i < vis.displayData.length; i++){
-        //     console.log(vis.y(vis.displayData[i]));
-        // }
-        // console.log('!!!!!!!!!!!!!');
-
 
         var bars = vis.svg.selectAll(".bar")
             .data(vis.displayData);
@@ -139,4 +131,35 @@ class BarVis {
 
         vis.wrangleData();
     }
+
+    changeState(data, actualNum){
+        let vis = this;
+
+        vis.data = data;
+        vis.actualNum = actualNum;
+        vis.rownums = [];
+
+        vis.svg.select("line").remove();
+        vis.svg.select("#actualNumLineText").remove();
+
+        vis.svg.append("line")
+            .attr("x1", vis.x(vis.actualNum))
+            .attr("y1", 0)
+            .attr("x2", vis.x(vis.actualNum))
+            .attr("y2", vis.height)
+            .style("stroke-width", 5)
+            .style("stroke", "red")
+            .style("fill", "none");
+        vis.svg.append("text")
+            .attr("id", "actualNumLineText")
+            .attr("x", vis.x(vis.actualNum))
+            .attr("y", 0)
+            .text("Actual")
+            .style("stroke", "red");
+
+
+
+        vis.wrangleData();
+    }
 }
+

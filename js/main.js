@@ -1,24 +1,115 @@
 let myBarGraph;
 
-let simData;
+// let simData;
 
-let currentState = "Oregon";
+let currentState = "Oklahoma";
+let numStates = 2;
+let numSimulationsPerState = 5000;
+// let gifTime = 1000;
+let brrAnimationTimeMS = 200;
+let simResults = []
+let states = [
+    // 'Alabama',
+    // 'Alaska',
+    // 'Arizona',
+    // 'Arkansas',
+    // 'California',
+    // 'Colorado',
+    // 'Connecticut',
+    // 'Delaware',
+    // 'Florida',
+    // 'Georgia',
+    // 'Hawaii',
+    // 'Idaho',
+    // 'Indiana',
+    // 'Illinois',
+    // 'Iowa',
+    // 'Kansas',
+    // 'Kentucky',
+    // 'Louisiana',
+    // 'Maine',
+    // 'Maryland',
+    // 'Massachusetts',
+    // 'Michigan',
+    // 'Minnesota',
+    // 'Mississippi',
+    // 'Missouri',
+    // 'Montana',
+    // 'Nebraska',
+    // 'New Hampshire',
+    // 'New Jersey',
+    // 'New Mexico',
+    // 'New York',
+    // 'Nevada',
+    // 'North Carolina',
+    // 'North Dakota',
+    // 'Ohio',
+    'Oklahoma',
+    'Oregon',
+    // 'Pennsylvania',
+    // 'Rhode Island',
+    // 'South Carolina',
+    // 'South Dakota',
+    // 'Tennessee',
+    // 'Texas',
+    // 'Utah',
+    // 'Vermont',
+    // 'Virginia',
+    // 'Washington',
+    // 'West Virginia',
+    // 'Wisconsin',
+    // 'Wyoming'
+]
+
+let numDistricts = [
+    5, //oklahoma
+    6 // oregon
+]
+
+let actualNums = [
+    0, // oklahoma
+    5 //oregon
+]
 
 // load data using promises
 let promises = [
-    d3.csv("data/OR_cd_2020_stats.csv", row =>{
-        row.ndshare = +row.ndshare;
-        return {
-            'ndshare' : row.ndshare,
-            'district' : row.district};
-    })
+    d3.csv("data/OK_cd_2020_stats.csv", row =>processRow(row)),
+    d3.csv("data/OR_cd_2020_stats.csv", row =>processRow(row))
 ];
 
-function getNumDemDistricts(data){
+function processRow(row){
+    row.ndshare = +row.ndshare;
+    let res ={'ndshare' : row.ndshare,
+            'district' : row.district};
+    return res;
+}
+
+Promise.all(promises)
+    .then(function (data) {
+        for (let j = 0; j < numStates; j++){
+            let simRes = getNumDemDistricts(data[j], numDistricts[j]);
+            console.log(simRes);
+            simResults.push(simRes);
+        }
+
+        //first state results
+        let simulationResults = simResults[states.indexOf(currentState)];
+        let actualNum = actualNums[states.indexOf(currentState)];
+
+        // initialize bar graph
+        myBarGraph = new BarVis('barGraph', simulationResults, actualNum);
+    })
+    .catch(function (err) {
+        console.log(err)
+    });
+
+function getNumDemDistricts(data, numDistricts){
     let newData = [];
     let x = 0;
+    // console.log("YALL");
+    // console.log(data);
     for (let i = 0; i < data.length; i++) {
-        if ((i%6 == 0) && (i != 0)){
+        if ((i%numDistricts == 0) && (i != 0)){
             newData.push(x);
             x = 0;
         }
@@ -31,61 +122,41 @@ function getNumDemDistricts(data){
     return newData;
 }
 
-Promise.all(promises)
-    .then(function (data) {
-        let simRes = getNumDemDistricts(data[0]);
-        simData = simRes;
-        // console.log('check out the sim results', simRes);
-        plotBarVis(simRes);
-    })
-    .catch(function (err) {
-        console.log(err)
-    });
+function updateState(){
+    var select = document.getElementById('statesDropdown');
+    currentState = select.options[select.selectedIndex].text;
+    console.log("new state " + currentState);
+    let simulationResults = simResults[states.indexOf(currentState)];
+    let actualNum = actualNums[states.indexOf(currentState)];
 
-function plotBarVis(simulationResults) {
 
-    // log data
-    myBarGraph = new BarVis('barGraph', simulationResults, 5);
+    myBarGraph.changeState(simulationResults, actualNum);
 }
 
-$('.add-samples-1').on('click',function(){
-    addSamples(1);
-    // myBarGraph.addRowNums([getRandomInt(0, simData.length)]);
-});
 
-$('.add-samples-3').on('click',function(){
-    addSamples(3);
-    // myBarGraph.addRowNums(getRandomInts(3, 0, simData.length));
-});
-
-$('.add-samples-10').on('click',function(){
-    addSamples(10);
-    // myBarGraph.addRowNums(getRandomInts(10, 0, simData.length));
-});
-
-$('.add-samples-30').on('click',function(){
-    addSamples(30);
-    // myBarGraph.addRowNums(getRandomInts(30, 0, simData.length));
-});
-
-$('.add-samples-100').on('click',function(){
-    addSamples(100);
-    // myBarGraph.addRowNums(getRandomInts(100, 0, simData.length));
-});
+$('.add-samples-1').on('click',function(){addSamples(1);});
+$('.add-samples-3').on('click',function(){addSamples(3);});
+$('.add-samples-10').on('click',function(){addSamples(10);});
+$('.add-samples-30').on('click',function(){addSamples(30);});
+$('.add-samples-100').on('click',function(){addSamples(100);});
+$('.statesDropdown').on('change',function(){updateState();});
 
 function addSamples(n){
-
     var element = document.getElementById("brr");
     element.style.display = "block";
-    delay(1000).then(() => finishAddingSamples(n));
-
+    finishAddingSamples(n);
 }
 
 function finishAddingSamples(n){
-    var element = document.getElementById("brr");
-    element.style.display = "none";
-    myBarGraph.addRowNums(getRandomInts(n, 0, simData.length));
+    for (let i = 0; i < n; i++){
+        delay((i+1) * brrAnimationTimeMS).then(() => myBarGraph.addRowNums(getRandomInts(1, 0, numSimulationsPerState)));
+    }
+    delay(n*brrAnimationTimeMS).then(() => {
+        var element = document.getElementById("brr");
+        element.style.display = "none";
+    })
 }
+
 
 function getRandomInts(numInts, min, max){
     let res = [];
