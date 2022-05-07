@@ -1,0 +1,4 @@
+https://imgflip.com/gif-maker
+300 ms gaps - slow
+80 ms gaps - medium
+40 ms gaps - fast
