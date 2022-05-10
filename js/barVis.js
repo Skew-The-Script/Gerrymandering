@@ -1,11 +1,12 @@
 class BarVis {
 
-    constructor(parentElement, data, actualNum) {
+    constructor(parentElement, data, numDistricts, actualNumDem) {
         this.parentElement = parentElement;
         this.data = data;
         this.rownums = [];
         this.displayData = null;
-        this.actualNum = actualNum;
+        this.numDistricts = numDistricts;
+        this.actualNumDem = actualNumDem;
         this.initVis();
     }
 
@@ -13,7 +14,7 @@ class BarVis {
         let vis = this;
 
         //setup SVG
-        vis.margin = {top: 20, right: 50, bottom: 20, left: 100};
+        vis.margin = {top: 20, right: 50, bottom: 20, left: 50};
 
         //jquery
         vis.width = $("#" + vis.parentElement).width() - vis.margin.left - vis.margin.right;
@@ -36,35 +37,57 @@ class BarVis {
             .append("g")
             .attr("transform", "translate(" + vis.margin.left + "," + vis.margin.top + ")");
 
-        vis.svg.append("g")
-            .attr("class", "x-axis axis");
 
-        vis.x = d3.scaleLinear()
-            .domain([0, 5])
-            .range([0, vis.width]);
 
-        vis.svg.append("line")
-            .attr("x1", vis.x(vis.actualNum))
-            .attr("y1", 0)
-            .attr("x2", vis.x(vis.actualNum))
-            .attr("y2", vis.height)
-            .style("stroke-width", 5)
-            .style("stroke", "red")
-            .style("fill", "none");
+        // vis.x = d3.scaleLinear()
+        //     .domain([0, vis.numDistricts])
+        //     .range([0, vis.width*0.9]);
+        //
+        // vis.y = d3.scaleLinear()
+        //     .domain([0, 1])
+        //     .range([vis.height, 0]);
+
+        // vis.y_axis = d3.axisLeft()
+        //     .scale(vis.y);
+
         vis.svg.append("text")
-            .attr("id", "actualNumLineText")
-            .attr("x", vis.x(vis.actualNum))
-            .attr("y", 0)
-            .text("Actual")
-            .style("stroke", "red");
+            .style("font-size", "15px")
+            .attr("y", -50)
+            .attr("x", -200)
+            .attr("dy", ".75em")
+            .attr("transform", "rotate(-90)")
+            .text("# of Simulations (# of maps)");
+
+
+
+        // ////////////////////////////
+        // // place vertical line showing actual # of dem districts
+        // vis.svg.append("line")
+        //     .attr("id", "actualNumLine")
+        //     .attr("x1", vis.x(vis.actualNumDem))
+        //     .attr("y1", -5)
+        //     .attr("x2", vis.x(vis.actualNumDem))
+        //     .attr("y2", vis.height)
+        //     .style("stroke-width", 5)
+        //     .style("stroke", "red")
+        //     .style("fill", "none");
+        // vis.svg.append("text")
+        //     .attr("id", "actualNumLineText")
+        //     .attr("x", vis.x(vis.actualNumDem))
+        //     .attr("y", -5)
+        //     .text("Actual: " + vis.actualNumDem.toString())
+        //     .style("stroke", "red");
+        // //////////////////////////////////////////
 
         vis.wrangleData();
-
     }
 
     wrangleData() {
         let vis = this;
-        vis.displayData = [0, 0, 0, 0, 0, 0];
+        vis.displayData = [];
+        for (let i = 0; i < vis.numDistricts + 1; i++){
+            vis.displayData.push(0);
+        }
 
         for (let i = 0; i < vis.data.length; i++){
             if (vis.rownums.includes(i)){
@@ -77,9 +100,25 @@ class BarVis {
     updateVis() {
         let vis = this;
 
+        vis.svg.select("#barGraphYAxis").remove();
+
+        vis.x = d3.scaleLinear()
+            .domain([0, vis.numDistricts])
+            .range([0, vis.width*0.9]);
+
         vis.y = d3.scaleLinear()
             .domain([0, d3.max(vis.displayData)])
             .range([vis.height, 0]);
+
+        vis.y_axis = d3.axisLeft()
+            .scale(vis.y)
+            .ticks(d3.min([10, d3.max(vis.displayData)]))
+            .tickFormat(d3.format("d"));
+
+        vis.svg.append("g")
+            .attr("id", "barGraphYAxis")
+            .attr("transform", "translate(-10, 0)")
+            .call(vis.y_axis);
 
         var bars = vis.svg.selectAll(".bar")
             .data(vis.displayData);
@@ -90,7 +129,7 @@ class BarVis {
             .transition()
             .attr("x", function(d, i){return vis.x(i);})
             .attr("y", function(d, i){return vis.y(d);})
-            .attr("width", 50)
+            .attr("width", 0.3*vis.width/vis.numDistricts)
             .attr("height", function(d, i){return vis.height - vis.y(d);});
 
         bars.exit().remove();
@@ -102,7 +141,7 @@ class BarVis {
             .attr("class", "bar-label")
             .merge(barLabels)
             .transition()
-            .attr("x", function(d, i){return vis.x(i);})
+            .attr("x", function(d, i){return vis.x(i) + 0.15*vis.width/vis.numDistricts;})
             .attr("y", function(d, i){return vis.height + 20;})
             .text(function(d, i){return i;});
 
@@ -115,11 +154,16 @@ class BarVis {
             .attr("class", "bar-value")
             .merge(barValues)
             .transition()
-            .attr("x", function(d, i){return vis.x(i);})
-            .attr("y", function(d, i){return vis.y(d) - 5;})
-            .text(function(d, i){return d;});
+            .attr("x", function(d, i){return vis.x(i) + 0.3*vis.width/vis.numDistricts + 5;})
+            .attr("y", function(d, i){return vis.y(d) + 10;})
+            .text(function(d, i){
+                if (d > 0){ return d;}
+                else{ return "";}
+            });
 
         barValues.exit().remove();
+
+        vis.updateActualNumLine();
     }
 
     addRowNums(rowNums){
@@ -132,34 +176,47 @@ class BarVis {
         vis.wrangleData();
     }
 
-    changeState(data, actualNum){
+    changeState(data, numDistricts, actualNumDem){
         let vis = this;
 
         vis.data = data;
-        vis.actualNum = actualNum;
+        vis.numDistricts = numDistricts;
+        vis.actualNumDem = actualNumDem;
         vis.rownums = [];
 
-        vis.svg.select("line").remove();
+        // vis.updateActualNumLine();
+
+        vis.wrangleData();
+    }
+
+    updateActualNumLine(){
+        let vis = this;
+
+        vis.svg.select("#actualNumLine").remove();
         vis.svg.select("#actualNumLineText").remove();
 
+        vis.x = d3.scaleLinear()
+            .domain([0, vis.numDistricts])
+            .range([0, vis.width*0.9]);
+
+        ////////////////////////////
+        // place vertical line showing actual # of dem districts
         vis.svg.append("line")
-            .attr("x1", vis.x(vis.actualNum))
-            .attr("y1", 0)
-            .attr("x2", vis.x(vis.actualNum))
+            .attr("id", "actualNumLine")
+            .attr("x1", vis.x(vis.actualNumDem) + 0.15*vis.width/vis.numDistricts)
+            .attr("y1", -5)
+            .attr("x2", vis.x(vis.actualNumDem) + 0.15*vis.width/vis.numDistricts)
             .attr("y2", vis.height)
             .style("stroke-width", 5)
             .style("stroke", "red")
             .style("fill", "none");
         vis.svg.append("text")
             .attr("id", "actualNumLineText")
-            .attr("x", vis.x(vis.actualNum))
-            .attr("y", 0)
+            .attr("x", vis.x(vis.actualNumDem))
+            .attr("y", -5)
             .text("Actual")
             .style("stroke", "red");
-
-
-
-        vis.wrangleData();
+        ////////////////////////////
     }
 }
 
