@@ -17,7 +17,7 @@ class BarVis {
         let vis = this;
 
         //setup SVG
-        vis.margin = {top: 60, right: 50, bottom: 20, left: 50};
+        vis.margin = {top: 60, right: 50, bottom: 50, left: 50};
 
         //jquery
         vis.width = $("#" + vis.parentElement).width() - vis.margin.left - vis.margin.right;
@@ -48,6 +48,14 @@ class BarVis {
             .attr("transform", "rotate(-90)")
             .text("# of Simulations (# of maps)");
 
+        vis.svg.append("text")
+            .style("font-size", "15px")
+            .attr("y", 25)
+            .attr("x", vis.width / 3)
+            .attr("dy", "1.1em")
+            .attr("transform", "translate(0,"+vis.height+")")
+            .text("Number of Democrat-Leaning Districts (within each map)");
+
         vis.wrangleData();
     }
 
@@ -58,11 +66,10 @@ class BarVis {
             vis.displayData.push(0);
         }
 
-        for (let i = 0; i < vis.data.length; i++){
-            if (vis.rownums.includes(i)){
-                vis.displayData[vis.data[i]] += 1;
-            }
+        for (let j = 0; j < vis.rownums.length; j++){
+            vis.displayData[vis.data[j]] += 1;
         }
+
         vis.updateVis();
     }
 

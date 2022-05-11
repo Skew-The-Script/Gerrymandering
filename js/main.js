@@ -269,7 +269,7 @@ $('.add-samples-100').on('click',function(){beginAddingSamples(100);});
 $('.statesDropdown').on('change',function(){updateState();});
 
 function beginAddingSamples(n){
-    window.scrollTo(0,document.body.scrollHeight);
+    window.scrollTo(0,document.body.scrollHeight / 4);
     // activate middle html element
     simMapLabel.innerText = "";
     map2colelement.style.display = "block";
@@ -295,20 +295,20 @@ function beginAddingSamples(n){
     }
     else if (n == 10){
         brrelement.src = "gifs/"+currentAbbr+"_slow.gif";
-        brrelement.width = 220;
-        brrelement.height = 220;
+        brrelement.width = 150;
+        brrelement.height = 150;
         animTime = 300;
     }
     else if (n == 30){
         brrelement.src = "gifs/"+currentAbbr+"_medium.gif";
-        brrelement.width = 220;
-        brrelement.height = 220;
+        brrelement.width = 150;
+        brrelement.height = 150;
         animTime = 100;
     }
     else if (n == 100){
         brrelement.src = "gifs/"+currentAbbr+"_fast.gif";
-        brrelement.width = 220;
-        brrelement.height = 220;
+        brrelement.width = 150;
+        brrelement.height = 150;
         animTime = 50;
     }
     finishAddingSamples(n, animTime);
