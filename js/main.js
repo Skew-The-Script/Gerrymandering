@@ -55,7 +55,7 @@ let stateInfo = [
         'abbr' : 'MN'
     },
     {   'name' : 'Mississippi',
-        'abbr' : 'MI'
+        'abbr' : 'MS'
     },
     {   'name' : 'Montana',
         'abbr' : 'MT'
@@ -114,6 +114,7 @@ let stateInfo = [
 ];
 let numStates = stateInfo.length;
 
+// DOCTREE ELEMENTS
 // image and gif elements (to reset the image/gif source)
 let brrelement = document.getElementById("brr");
 let map1element = document.getElementById("map1");
@@ -126,22 +127,20 @@ let simMapLabel = document.getElementById("simMapLabel");
 let mapEnactedLabel = document.getElementById("mapEnactedlabel");
 
 // div elements (to turn the html block on/off in the doctree)
-let brrColelement = document.getElementById("brrCol");
+let stateMapelement = document.getElementById("stateMap");
 let map1colelement = document.getElementById("map1col");
 let map2colelement = document.getElementById("map2col");
 let map3colelement = document.getElementById("map3col");
 let mapEnactedcolelement = document.getElementById("mapEnactedcol");
 let mapEnactedcollabelelement = document.getElementById("mapEnactedCollabel");
-
 let stateDropdownSelect = document.getElementById('statesDropdown');
 let dropdownLabel = document.getElementById("statesDropdownLabel");
 let simButtons = document.getElementById("simButtons");
 let barGraphXLabelCol = document.getElementById("barGraphXLabelCol");
-
+let citationElement = document.getElementById("citingAlarm");
 
 //////////////////////////////////////////////////////////////////
 // process data
-
 let promises = [];
 for (let i = 0; i < numStates; i++){
     let abbr = stateInfo[i]['abbr'];
@@ -201,34 +200,31 @@ Promise.all(promises)
         // initialize bar graph
         myBarGraph = new BarVis('barGraph', simulationResults, numDistricts, actualNum);
 
-
+        // reset images and labels
         brrelement.src = "img/blank.png";
         simMapLabel.innerText = "";
+        mapEnactedLabel.innerText = "Actual " + currentState + " Map";
+        // barGraphXLabelCol.innerText = "Number of Democrat-Leaning Districts (within each map)";
 
-        // simMapLabel.innerText = "* * * * **************************************---Actual 2020 Map---**";
         // activate UI elements for maps, dropdown menu, and simulation buttons
         // they start out deactivated while the data is loading
+        stateMapelement.style.display = "block";
         map1colelement.style.display = "block";
         map2colelement.style.display = "block";
         map3colelement.style.display = "block";
         mapEnactedcolelement.style.display = "block";
-        mapEnactedLabel.innerText = currentState + " 2020 Congressional Map";
         mapEnactedcollabelelement.style.display = "block";
-        // mapEnactedColLabelElement.style.display = "block";
         stateDropdownSelect.style.display = "block";
         dropdownLabel.style.display = "block";
         simButtons.style.display = "block";
-        barGraphXLabelCol.innerText = "Number of Democrat-Leaning Districts (within each map)";
-
+        citationElement.style.display = "block";
     })
     .catch(function (err) {
         console.log(err)
     });
 
-
 ////////////////////////////////////////////////////////////////
 // respond to state dropdown menu
-
 function getStateIndex(state){
     for (let i = 0; i < numStates; i++){
         if (stateInfo[i]['name'] == state){ return i; }
@@ -243,11 +239,10 @@ function updateState(){
     map2element.src = "img/blank.png";
     map3element.src = "img/blank.png";
     simMapLabel.innerText = "";
-    // simMapLabel.innerText = "**********************************************---Actual 2020 Map---**";
 
     // get state from dropdown
     currentState = stateDropdownSelect.options[stateDropdownSelect.selectedIndex].text;
-    mapEnactedLabel.innerText = currentState + " 2020 Congressional Map";
+    mapEnactedLabel.innerText = "Actual " + currentState + " Map";
     let stateIndex = getStateIndex(currentState);
     // get state abbreviation
     currentAbbr = stateInfo[stateIndex]['abbr'];
@@ -274,10 +269,9 @@ $('.add-samples-100').on('click',function(){beginAddingSamples(100);});
 $('.statesDropdown').on('change',function(){updateState();});
 
 function beginAddingSamples(n){
-
+    window.scrollTo(0,document.body.scrollHeight);
     // activate middle html element
     simMapLabel.innerText = "";
-    // simMapLabel.innerText = "**********************************************---Actual 2020 Map---**";
     map2colelement.style.display = "block";
 
     // hide three sample maps and enacted map
@@ -289,30 +283,34 @@ function beginAddingSamples(n){
     let animTime = 0;
     if (n == 1){
         brrelement.src = "gifs/running_sim_text_slow.gif";
+        brrelement.width = 300;
         brrelement.height = 100;
         animTime = 1000;
     }
     else if (n == 3){
         brrelement.src = "gifs/running_sim_text_fast.gif";
+        brrelement.width = 300;
         brrelement.height = 100;
         animTime = 500;
     }
     else if (n == 10){
         brrelement.src = "gifs/"+currentAbbr+"_slow.gif";
-        brrelement.height = 200;
+        brrelement.width = 220;
+        brrelement.height = 220;
         animTime = 300;
     }
     else if (n == 30){
         brrelement.src = "gifs/"+currentAbbr+"_medium.gif";
-        brrelement.height = 200;
+        brrelement.width = 220;
+        brrelement.height = 220;
         animTime = 100;
     }
     else if (n == 100){
         brrelement.src = "gifs/"+currentAbbr+"_fast.gif";
-        brrelement.height = 200;
+        brrelement.width = 220;
+        brrelement.height = 220;
         animTime = 50;
     }
-
     finishAddingSamples(n, animTime);
 }
 
@@ -324,20 +322,18 @@ function finishAddingSamples(n, animTime){
         let rand = 0;
 
         // sample at most three from the simulations with a map
-        if (i <= 3){
-            rand = getRandomInt(1, 300);
+        if (n - i <= 3){
+            rand = getRandomInt(0, 299);
             validMapRandomInts.push(rand);
         }
 
         // sample the rest (if applicable) from the simulations without a map
         else{
-            rand = getRandomInt(301, 5000);
+            rand = getRandomInt(300, 4999);
         }
 
         // add each sample to the bar graph
-        // console.log(rand);
         delay((i+1) * animTime).then(() => myBarGraph.addRowNums([rand]));
-
 
         // display maps one at a time if adding n=3 samples
         if (n == 3){
@@ -374,11 +370,9 @@ function finishAddingSamples(n, animTime){
             map2element.src = "maps/" + currentAbbr + "_draw_"+validMapRandomInts[0].toString()+".png";
             map3element.src = "img/blank.png";
             simMapLabel.innerText = "Simulated Map";
-            // simMapLabel.innerText = "*****-----------Simulated Map-----------***---Actual 2020 Map---**";
         }
         else if (n == 3){
             simMapLabel.innerText = "Simulated Maps";
-            // simMapLabel.innerText = "*****-----------Simulated Maps-----------***---Actual 2020 Map---**";
         }
         else if (n > 3){
             // display three simulated maps
@@ -386,8 +380,7 @@ function finishAddingSamples(n, animTime){
             map2element.src = "maps/" + currentAbbr + "_draw_"+validMapRandomInts[1].toString()+".png";
             map3element.src = "maps/" + currentAbbr + "_draw_"+validMapRandomInts[2].toString()+".png";
 
-            simMapLabel.innerText = "Simulated Maps";
-            // simMapLabel.innerText = "*****-----------Simulated Maps-----------***---Actual 2020 Map---**";
+            simMapLabel.innerText = "Last 3 Simulated Maps";
         }
     });
 }
