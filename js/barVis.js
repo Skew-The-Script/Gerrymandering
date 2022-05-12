@@ -5,6 +5,7 @@ class BarVis {
     constructor(parentElement, data, numDistricts, actualNumDem) {
         this.parentElement = parentElement;
         this.data = data;
+        console.log(data.length + "datapoints");
         this.rownums = [];
         this.displayData = null;
         this.numDistricts = numDistricts;
@@ -17,7 +18,7 @@ class BarVis {
         let vis = this;
 
         //setup SVG
-        vis.margin = {top: 60, right: 50, bottom: 50, left: 50};
+        vis.margin = {top: 30, right: 50, bottom: 45, left: 50};
 
         //jquery
         vis.width = $("#" + vis.parentElement).width() - vis.margin.left - vis.margin.right;
@@ -43,7 +44,7 @@ class BarVis {
         vis.svg.append("text")
             .style("font-size", "15px")
             .attr("y", -50)
-            .attr("x", -200)
+            .attr("x", -170)
             .attr("dy", ".75em")
             .attr("transform", "rotate(-90)")
             .text("# of Simulations (# of maps)");
@@ -67,7 +68,7 @@ class BarVis {
         }
 
         for (let j = 0; j < vis.rownums.length; j++){
-            vis.displayData[vis.data[j]] += 1;
+            vis.displayData[vis.data[vis.rownums[j]]] += 1;
         }
 
         vis.updateVis();
@@ -120,9 +121,6 @@ class BarVis {
             .attr("height", function(d, i){
                 if (vis.newState){ return 0; }
                 else{
-                    console.log("HEIGHT: " + vis.height);
-                    console.log("VALUE: " + d);
-                    console.log("SCALEVALUE: " + vis.y(d));
                     return vis.height - vis.y(d); }
             });
 
@@ -152,6 +150,8 @@ class BarVis {
         let vis = this;
         vis.newState = false;
         for (let i = 0; i < rowNums.length; i++){
+            // console.log("adding row num " + rowNums[i]);
+            // console.log("vis.data[rowNums[i]]);
             vis.rownums.push(rowNums[i]);
         }
 
@@ -159,6 +159,7 @@ class BarVis {
     }
 
     changeState(data, numDistricts, actualNumDem){
+        console.log(data.length + "datapoints");
         let vis = this;
         vis.newState = true;
         vis.data = data;

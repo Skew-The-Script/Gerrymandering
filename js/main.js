@@ -114,14 +114,10 @@ let stateInfo = [
 ];
 let numStates = stateInfo.length;
 
-// DOCTREE ELEMENTS
 // image and gif elements (to reset the image/gif source)
 let map1element = document.getElementById("map1");
 let map2element = document.getElementById("map2");
 let map3element = document.getElementById("map3");
-// let map1BLANKelement = document.getElementById("map1BLANK");
-// let map2BLANKelement = document.getElementById("map2BLANK");
-// let map3BLANKelement = document.getElementById("map3BLANK");
 let mapEnactedelement = document.getElementById("mapEnacted");
 
 // text element (change the text depending on the simulation run)
@@ -134,9 +130,7 @@ let stateMapelement = document.getElementById("stateMap");
 let map1colelement = document.getElementById("map1col");
 let map2colelement = document.getElementById("map2col");
 let map3colelement = document.getElementById("map3col");
-// let map1BLANKcolelement = document.getElementById("map1colBLANK");
 let map2BLANKcolelement = document.getElementById("map2colBLANK");
-// let map3BLANKcolelement = document.getElementById("map3colBLANK");
 let mapEnactedcolelement = document.getElementById("mapEnactedcol");
 let mapEnactedcollabelelement = document.getElementById("mapEnactedCollabel");
 let stateDropdownSelect = document.getElementById('statesDropdown');
@@ -177,7 +171,7 @@ function getNumDemDistricts(stateIndex, data){
             if (data[i].ndshare > 0.5){
                 x += 1;
             }
-            if (i%_numDistricts == 0){
+            if (i%_numDistricts == _numDistricts - 1){
                 newData.push(x);
                 x = 0;
             }
@@ -191,6 +185,7 @@ function getNumDemDistricts(stateIndex, data){
 Promise.all(promises)
     .then(function (data) {
         for (let j = 0; j < numStates; j++){
+            // console.log(stateInfo[j]['name']);
             let simRes = getNumDemDistricts(j, data[j]);
             simResults.push(simRes);
         }
@@ -213,7 +208,6 @@ Promise.all(promises)
         // barGraphXLabelCol.innerText = "Number of Democrat-Leaning Districts (within each map)";
 
         // activate UI elements for maps, dropdown menu, and simulation buttons
-        // they start out deactivated while the data is loading
         stateMapelement.style.display = "block";
         map1colelement.style.display = "block";
         map2colelement.style.display = "block";
@@ -240,8 +234,8 @@ function getStateIndex(state){
 
 function updateState(){
     window.scrollTo(0,document.body.scrollHeight / 2.5);
+
     // set simulation maps blank
-    // brrelement.src = "img/blank.png";
     map1element.src = "img/blank.png";
     map2element.src = "img/blank.png";
     map3element.src = "img/blank.png";
@@ -276,19 +270,12 @@ $('.add-samples-100').on('click',function(){beginAddingSamples(100);});
 $('.statesDropdown').on('change',function(){updateState();});
 
 function beginAddingSamples(n){
-    // activate middle html element
+
     simMapLabel.innerText = "";
     map2colelement.style.display = "block";
-
-    // hide three sample maps and enacted map
-    // map1element.src = "img/blank.png";
-    // map2element.src = "img/blank.png";
-    // map3element.src = "img/blank.png";
     map1colelement.style.display = "none";
     map3colelement.style.display = "none";
-    // map1BLANKcolelement.style.display = "none";
     map2BLANKcolelement.style.display = "none";
-
 
     // set proper gif using current state and # samples being added
     let animTime = 0;
@@ -335,6 +322,7 @@ function finishAddingSamples(n, animTime){
         // sample at most three from the simulations with a map
         if (n - i <= 3){
             rand = getRandomInt(0, 299);
+            // console.log("going to activate map draw " + (rand + 2));
             validMapRandomInts.push(rand);
         }
 
@@ -342,6 +330,9 @@ function finishAddingSamples(n, animTime){
         else{
             rand = getRandomInt(300, 4999);
         }
+
+        // console.log("new random simulation number " + rand);
+
 
         // add each sample to the bar graph
         delay((i+1) * animTime).then(() => myBarGraph.addRowNums([rand]));
@@ -375,8 +366,6 @@ function finishAddingSamples(n, animTime){
     // render maps
     delay(n*animTime).then(() => {
 
-
-
         if (n == 1){
 
             // display single simulated map
@@ -386,12 +375,11 @@ function finishAddingSamples(n, animTime){
             simMapLabel.innerText = "Simulated Map";
         }
         else if (n == 3){
-            // map1BLANKcolelement.style.display = "block";
+
             map2BLANKcolelement.style.display = "block";
             map1colelement.style.display = "block";
             map3colelement.style.display = "block";
             simMapLabel.innerText = "Simulated Maps";
-
         }
         else if (n > 3){
 
@@ -405,7 +393,6 @@ function finishAddingSamples(n, animTime){
 
             map1colelement.style.display = "block";
             map3colelement.style.display = "block";
-            // map1BLANKcolelement.style.display = "block";
             map2BLANKcolelement.style.display = "block";
             simMapLabel.innerText = "Last 3 Simulated Maps";
         }
