@@ -114,6 +114,9 @@ let stateInfo = [
 ];
 let numStates = stateInfo.length;
 
+//////////////////////////////////////////////////////////////////
+// access html elements
+
 // image and gif elements (to reset the image/gif source)
 let map1element = document.getElementById("map1");
 let map2element = document.getElementById("map2");
@@ -140,6 +143,7 @@ let citationElement = document.getElementById("citingAlarm");
 
 //////////////////////////////////////////////////////////////////
 // process data
+
 let promises = [];
 for (let i = 0; i < numStates; i++){
     let abbr = stateInfo[i]['abbr'];
@@ -225,6 +229,7 @@ Promise.all(promises)
 
 ////////////////////////////////////////////////////////////////
 // respond to state dropdown menu
+
 function getStateIndex(state){
     for (let i = 0; i < numStates; i++){
         if (stateInfo[i]['name'] == state){ return i; }
@@ -322,7 +327,6 @@ function finishAddingSamples(n, animTime){
         // sample at most three from the simulations with a map
         if (n - i <= 3){
             rand = getRandomInt(0, 299);
-            // console.log("going to activate map draw " + (rand + 2));
             validMapRandomInts.push(rand);
         }
 
@@ -331,11 +335,8 @@ function finishAddingSamples(n, animTime){
             rand = getRandomInt(300, 4999);
         }
 
-        // console.log("new random simulation number " + rand);
-
-
         // add each sample to the bar graph
-        delay((i+1) * animTime).then(() => myBarGraph.addRowNums([rand]));
+        delay((i+1) * animTime).then(() => myBarGraph.addRowNum(rand));
 
         // display maps one at a time if adding n=3 samples
         if (n == 3){

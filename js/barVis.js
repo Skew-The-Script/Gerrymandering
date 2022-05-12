@@ -1,5 +1,3 @@
-let barWidth = 2;
-
 class BarVis {
 
     constructor(parentElement, data, numDistricts, actualNumDem) {
@@ -62,11 +60,14 @@ class BarVis {
 
     wrangleData() {
         let vis = this;
+
+        // for a state with n districts, our bar graph will have n-1 bars
         vis.displayData = [];
         for (let i = 0; i < vis.numDistricts + 1; i++){
             vis.displayData.push(0);
         }
 
+        // add rows from the data to the histogram
         for (let j = 0; j < vis.rownums.length; j++){
             vis.displayData[vis.data[vis.rownums[j]]] += 1;
         }
@@ -115,9 +116,9 @@ class BarVis {
             .attr("class", "bar")
             .merge(bars)
             .transition()
-            .attr("x", function(d, i){return vis.x(i) - 0.5*barWidth*Math.sqrt(vis.width/(vis.numDistricts - 1));})
+            .attr("x", function(d, i){return vis.x(i) - Math.sqrt(vis.width/(vis.numDistricts - 1));})
             .attr("y", function(d, i){return vis.y(d);})
-            .attr("width", barWidth*Math.sqrt(vis.width/(vis.numDistricts - 1)))
+            .attr("width", 2*Math.sqrt(vis.width/(vis.numDistricts - 1)))
             .attr("height", function(d, i){
                 if (vis.newState){ return 0; }
                 else{
@@ -133,7 +134,7 @@ class BarVis {
             .attr("class", "bar-value")
             .merge(barValues)
             .transition()
-            .attr("x", function(d, i){return vis.x(i) + 0.5*barWidth*Math.sqrt(vis.width/(vis.numDistricts - 1)) + 3;})
+            .attr("x", function(d, i){return vis.x(i) + Math.sqrt(vis.width/(vis.numDistricts - 1)) + 3;})
             .attr("y", function(d, i){return vis.y(d) + 10;})
             .attr("fill", "#006fff")
             .text(function(d, i){
@@ -146,36 +147,27 @@ class BarVis {
         vis.updateActualNumLine();
     }
 
-    addRowNums(rowNums){
+    addRowNum(rowNum){
         let vis = this;
         vis.newState = false;
-        for (let i = 0; i < rowNums.length; i++){
-            // console.log("adding row num " + rowNums[i]);
-            // console.log("vis.data[rowNums[i]]);
-            vis.rownums.push(rowNums[i]);
-        }
-
+        vis.rownums.push(rowNum);
         vis.wrangleData();
     }
 
     changeState(data, numDistricts, actualNumDem){
-        console.log(data.length + "datapoints");
         let vis = this;
         vis.newState = true;
         vis.data = data;
         vis.numDistricts = numDistricts;
         vis.actualNumDem = actualNumDem;
         vis.rownums = [];
-
         vis.wrangleData();
     }
 
     updateActualNumLine(){
         let vis = this;
-
         vis.svg.select("#actualNumLine").remove();
         vis.svg.select("#actualNumLineText").remove();
-
         let xval = vis.x(vis.actualNumDem);
 
         ////////////////////////////
@@ -193,7 +185,7 @@ class BarVis {
             .attr("id", "actualNumLineText")
             .attr("transform", "rotate(-90)")
             .attr("x", -45)
-            .attr("y", vis.x(vis.actualNumDem))
+            .attr("y", xval)
             .text("Actual")
             .style("stroke", "red");
         ////////////////////////////
