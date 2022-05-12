@@ -116,10 +116,12 @@ let numStates = stateInfo.length;
 
 // DOCTREE ELEMENTS
 // image and gif elements (to reset the image/gif source)
-let brrelement = document.getElementById("brr");
 let map1element = document.getElementById("map1");
 let map2element = document.getElementById("map2");
 let map3element = document.getElementById("map3");
+// let map1BLANKelement = document.getElementById("map1BLANK");
+// let map2BLANKelement = document.getElementById("map2BLANK");
+// let map3BLANKelement = document.getElementById("map3BLANK");
 let mapEnactedelement = document.getElementById("mapEnacted");
 
 // text element (change the text depending on the simulation run)
@@ -127,16 +129,19 @@ let simMapLabel = document.getElementById("simMapLabel");
 let mapEnactedLabel = document.getElementById("mapEnactedlabel");
 
 // div elements (to turn the html block on/off in the doctree)
+let loadingColelement = document.getElementById("loadingCol");
 let stateMapelement = document.getElementById("stateMap");
 let map1colelement = document.getElementById("map1col");
 let map2colelement = document.getElementById("map2col");
 let map3colelement = document.getElementById("map3col");
+// let map1BLANKcolelement = document.getElementById("map1colBLANK");
+let map2BLANKcolelement = document.getElementById("map2colBLANK");
+// let map3BLANKcolelement = document.getElementById("map3colBLANK");
 let mapEnactedcolelement = document.getElementById("mapEnactedcol");
 let mapEnactedcollabelelement = document.getElementById("mapEnactedCollabel");
 let stateDropdownSelect = document.getElementById('statesDropdown');
 let dropdownLabel = document.getElementById("statesDropdownLabel");
 let simButtons = document.getElementById("simButtons");
-let barGraphXLabelCol = document.getElementById("barGraphXLabelCol");
 let citationElement = document.getElementById("citingAlarm");
 
 //////////////////////////////////////////////////////////////////
@@ -201,8 +206,9 @@ Promise.all(promises)
         myBarGraph = new BarVis('barGraph', simulationResults, numDistricts, actualNum);
 
         // reset images and labels
-        brrelement.src = "img/blank.png";
+        loadingColelement.style.display = "none";
         simMapLabel.innerText = "";
+        mapEnactedelement.src = "maps/"+currentAbbr+"_enacted.png";
         mapEnactedLabel.innerText = "Actual " + currentState + " Map";
         // barGraphXLabelCol.innerText = "Number of Democrat-Leaning Districts (within each map)";
 
@@ -233,8 +239,9 @@ function getStateIndex(state){
 }
 
 function updateState(){
+    window.scrollTo(0,document.body.scrollHeight / 2.5);
     // set simulation maps blank
-    brrelement.src = "img/blank.png";
+    // brrelement.src = "img/blank.png";
     map1element.src = "img/blank.png";
     map2element.src = "img/blank.png";
     map3element.src = "img/blank.png";
@@ -269,46 +276,50 @@ $('.add-samples-100').on('click',function(){beginAddingSamples(100);});
 $('.statesDropdown').on('change',function(){updateState();});
 
 function beginAddingSamples(n){
-    window.scrollTo(0,document.body.scrollHeight / 4);
     // activate middle html element
     simMapLabel.innerText = "";
     map2colelement.style.display = "block";
 
     // hide three sample maps and enacted map
-    map1element.src = "img/blank.png";
-    map2element.src = "img/blank.png";
-    map3element.src = "img/blank.png";
+    // map1element.src = "img/blank.png";
+    // map2element.src = "img/blank.png";
+    // map3element.src = "img/blank.png";
+    map1colelement.style.display = "none";
+    map3colelement.style.display = "none";
+    // map1BLANKcolelement.style.display = "none";
+    map2BLANKcolelement.style.display = "none";
+
 
     // set proper gif using current state and # samples being added
     let animTime = 0;
     if (n == 1){
-        brrelement.src = "gifs/running_sim_text_slow.gif";
-        brrelement.width = 300;
-        brrelement.height = 100;
+        map2element.src = "gifs/running_sim_text_slow.gif";
+        map2element.width = 300;
+        map2element.height = 100;
         animTime = 1000;
     }
     else if (n == 3){
-        brrelement.src = "gifs/running_sim_text_fast.gif";
-        brrelement.width = 300;
-        brrelement.height = 100;
+        map2element.src = "gifs/running_sim_text_fast.gif";
+        map2element.width = 300;
+        map2element.height = 100;
         animTime = 500;
     }
     else if (n == 10){
-        brrelement.src = "gifs/"+currentAbbr+"_slow.gif";
-        brrelement.width = 150;
-        brrelement.height = 150;
+        map2element.src = "gifs/"+currentAbbr+"_slow.gif";
+        map2element.width = 450;
+        map2element.height = 450;
         animTime = 300;
     }
     else if (n == 30){
-        brrelement.src = "gifs/"+currentAbbr+"_medium.gif";
-        brrelement.width = 150;
-        brrelement.height = 150;
+        map2element.src = "gifs/"+currentAbbr+"_medium.gif";
+        map2element.width = 450;
+        map2element.height = 450;
         animTime = 100;
     }
     else if (n == 100){
-        brrelement.src = "gifs/"+currentAbbr+"_fast.gif";
-        brrelement.width = 150;
-        brrelement.height = 150;
+        map2element.src = "gifs/"+currentAbbr+"_fast.gif";
+        map2element.width = 450;
+        map2element.height = 450;
         animTime = 50;
     }
     finishAddingSamples(n, animTime);
@@ -339,17 +350,23 @@ function finishAddingSamples(n, animTime){
         if (n == 3){
             if (i == 0){
                 delay((i+1) * animTime).then(() => {
-                    map1element.src = "maps/" + currentAbbr + "_draw_"+rand.toString()+".png";
+                    map1element.src = "maps/" + currentAbbr + "_draw_"+(rand+2).toString()+".png";
+                    map1colelement.style.display = "block";
                 });
             }
             else if (i == 1){
                 delay((i+1) * animTime).then(() => {
-                    map2element.src = "maps/" + currentAbbr + "_draw_"+rand.toString()+".png";
+                    map2colelement.style.display = "none";
+                    map2element.height = 250;
+                    map2element.width = 250;
+                    map2element.src = "maps/" + currentAbbr + "_draw_"+(rand+2).toString()+".png";
+                    map2colelement.style.display = "block";
                 });
             }
             else if (i == 2){
                 delay((i+1) * animTime).then(() => {
-                    map3element.src = "maps/" + currentAbbr + "_draw_"+rand.toString()+".png";
+                    map3colelement.style.display = "block";
+                    map3element.src = "maps/" + currentAbbr + "_draw_"+(rand+2).toString()+".png";
                 });
             }
         }
@@ -358,28 +375,38 @@ function finishAddingSamples(n, animTime){
     // render maps
     delay(n*animTime).then(() => {
 
-        // hide brr gif
-        brrelement.src = "img/blank.png";
 
-        // display enacted map
-        mapEnactedelement.src = "maps/" + currentAbbr + "_enacted.png"
 
         if (n == 1){
+
             // display single simulated map
-            map1element.src = "img/blank.png";
-            map2element.src = "maps/" + currentAbbr + "_draw_"+validMapRandomInts[0].toString()+".png";
-            map3element.src = "img/blank.png";
+            map2element.src = "maps/" + currentAbbr + "_draw_"+(validMapRandomInts[0]+2).toString()+".png";
+            map2element.height = 400;
+            map2element.width = 400;
             simMapLabel.innerText = "Simulated Map";
         }
         else if (n == 3){
+            // map1BLANKcolelement.style.display = "block";
+            map2BLANKcolelement.style.display = "block";
+            map1colelement.style.display = "block";
+            map3colelement.style.display = "block";
             simMapLabel.innerText = "Simulated Maps";
+
         }
         else if (n > 3){
-            // display three simulated maps
-            map1element.src = "maps/" + currentAbbr + "_draw_"+validMapRandomInts[0].toString()+".png";
-            map2element.src = "maps/" + currentAbbr + "_draw_"+validMapRandomInts[1].toString()+".png";
-            map3element.src = "maps/" + currentAbbr + "_draw_"+validMapRandomInts[2].toString()+".png";
 
+            map2element.height = 250;
+            map2element.width = 250;
+
+            // display three simulated maps
+            map1element.src = "maps/" + currentAbbr + "_draw_"+(validMapRandomInts[0]+2).toString()+".png";
+            map2element.src = "maps/" + currentAbbr + "_draw_"+(validMapRandomInts[1]+2).toString()+".png";
+            map3element.src = "maps/" + currentAbbr + "_draw_"+(validMapRandomInts[2]+2).toString()+".png";
+
+            map1colelement.style.display = "block";
+            map3colelement.style.display = "block";
+            // map1BLANKcolelement.style.display = "block";
+            map2BLANKcolelement.style.display = "block";
             simMapLabel.innerText = "Last 3 Simulated Maps";
         }
     });

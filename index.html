@@ -13,154 +13,175 @@
 <!-- WRAPPER -->
 <div class="container-fluid" style="height: 200vh; padding-top: 1vh">
 
-
-    <div class="row" style="width: 100%; height: 20%">
+    <!-- 1ST ROW: HEADING -->
+    <div class="row" style="width: 100%; height: 5%">
         <div class="col" style="width: 100%; border: thin solid grey; border-radius: 2px;">
-            <!-- HEADING -->
             <div class="row justify-content-center" style="height: 100%; background: #bdbdbd;">
                 <div class="align-self-center">
                     <h1>Gerrymandering</h1>
                 </div>
-                <h6>Of all the ways you could split up a state into congressional districts - how balanced are the actual maps?</h6>
             </div>
         </div>
     </div>
 
+<!--    2ND ROW: DESCRIPTION, LOADING GIF, STATE DROPDOWN, AND US MAP-->
+    <div class="row" style="width: 100%; height: 35%">
 
-    <div class="row" style="width: 100%; height: 25%">
-<!--        COLUMN1-->
-        <div class="col" style="width: 55%; height: 100%; border: thin solid grey; border-radius: 2px;">
-<!--            DROPDOWN-->
-            <div class="row" style=" width: 100%">
-                <label id="statesDropdownLabel" for="statesDropdown" style="display: none">Choose a state:</label>
-                <select class="statesDropdown" id="statesDropdown" style="display: none">
-                    <option value="Arizona">Arizona</option>
-                    <option value="Arkansas">Arkansas</option>
-                    <option value="California">California</option>
-                    <option value="Colorado">Colorado</option>
-                    <option value="Connecticut">Connecticut</option>
-                    <option value="Georgia">Georgia</option>
-                    <option value="Hawaii">Hawaii</option>
-                    <option value="Idaho">Idaho</option>
-                    <option value="Illinois">Illinois</option>
-                    <option value="Indiana">Indiana</option>
-                    <option value="Iowa">Iowa</option>
-                    <option value="Kansas">Kansas</option>
-                    <option value="Maine">Maine</option>
-                    <option value="Maryland">Maryland</option>
-                    <option value="Massachusetts">Massachusetts</option>
-                    <option value="Michigan">Michigan</option>
-                    <option value="Minnesota">Minnesota</option>
-                    <option value="Mississippi">Mississippi</option>
-                    <option value="Montana">Montana</option>
-                    <option value="Nebraska">Nebraska</option>
-                    <option value="Nevada">Nevada</option>
-                    <option value="New Jersey">New Jersey</option>
-                    <option value="New Mexico">New Mexico</option>
-                    <option value="New York">New York</option>
-                    <option value="North Carolina">North Carolina</option>
-                    <option value="Oklahoma">Oklahoma</option>
-                    <option value="Oregon">Oregon</option>
-                    <option value="Pennsylvania">Pennsylvania</option>
-                    <option value="Rhode Island">Rhode Island</option>
-                    <option value="Tennessee">Tennessee</option>
-                    <option value="Texas">Texas</option>
-                    <option value="Utah">Utah</option>
-                    <option value="Virginia">Virginia</option>
-                    <option value="Washington">Washington</option>
-                    <option value="West Virginia">West Virginia</option>
-                    <option value="Wisconsin">Wisconsin</option>
-                </select>
-            </div>
+            <!--        COLUMN1-->
+            <div class="col" style="width: 40vw; border: thin solid grey; border-radius: 2px;">
 
-<!--            BUTTONS-->
-            <div id="simButtons" class="row" style="width: 100%; height: 20vh; display: none; background: white; padding: 0;">
-                <h4>Add simulations</h4>
-                <div class="buttons">
-                    <button class="add-samples-1" style="width: 15%"> Add 1 simulation</button>
-                    <button class="add-samples-3" style="width: 15%"> Add 3 simulations</button>
-                    <button class="add-samples-10" style="width: 15%"> Add 10 simulations</button>
-                    <button class="add-samples-30" style="width: 15%"> Add 30 simulations</button>
-                    <button class="add-samples-100" style="width: 15%"> Add 100 simulations</button>
+                <h6>Of all the ways you could split up a state population into districts - how balanced are the actual maps?</h6>
+                <h6>The outlining of districts determines congressional representation in the US House of Representatives. Fairness is crucially important!</h6>
+
+                <!--            STATE DROPDOWN-->
+                <div class="row">
+                    <label id="statesDropdownLabel" for="statesDropdown" style="display: none">Choose a state:</label>
+                    <select class="statesDropdown" id="statesDropdown" style="display: none">
+                        <option value="Arizona">Arizona</option>
+                        <option value="Arkansas">Arkansas</option>
+                        <option value="California">California</option>
+                        <option value="Colorado">Colorado</option>
+                        <option value="Connecticut">Connecticut</option>
+                        <option value="Georgia">Georgia</option>
+                        <option value="Hawaii">Hawaii</option>
+                        <option value="Idaho">Idaho</option>
+                        <option value="Illinois">Illinois</option>
+                        <option value="Indiana">Indiana</option>
+                        <option value="Iowa">Iowa</option>
+                        <option value="Kansas">Kansas</option>
+                        <option value="Maine">Maine</option>
+                        <option value="Maryland">Maryland</option>
+                        <option value="Massachusetts">Massachusetts</option>
+                        <option value="Michigan">Michigan</option>
+                        <option value="Minnesota">Minnesota</option>
+                        <option value="Mississippi">Mississippi</option>
+                        <option value="Montana">Montana</option>
+                        <option value="Nebraska">Nebraska</option>
+                        <option value="Nevada">Nevada</option>
+                        <option value="New Jersey">New Jersey</option>
+                        <option value="New Mexico">New Mexico</option>
+                        <option value="New York">New York</option>
+                        <option value="North Carolina">North Carolina</option>
+                        <option value="Oklahoma">Oklahoma</option>
+                        <option value="Oregon">Oregon</option>
+                        <option value="Pennsylvania">Pennsylvania</option>
+                        <option value="Rhode Island">Rhode Island</option>
+                        <option value="Tennessee">Tennessee</option>
+                        <option value="Texas">Texas</option>
+                        <option value="Utah">Utah</option>
+                        <option value="Virginia">Virginia</option>
+                        <option value="Washington">Washington</option>
+                        <option value="West Virginia">West Virginia</option>
+                        <option value="Wisconsin">Wisconsin</option>
+                    </select>
+                </div>
+
+                <!--            LOADING GIF-->
+                <div id = "loadingCol" class="row" style="display: block">
+                    <div class="col justify-content-center"  style="height: 20%; display: block; text-align: center">
+                        <img id = "loading" src="gifs/loading.gif">
+                    </div>
                 </div>
             </div>
 
-<!--            GIF-->
-            <div id = "brrCol" class="row" style="width: 100%; height: 100%; display: block">
-                <div class="col justify-content-center"  style="width: 100%; height: 20%; display: block; text-align: center">
-                    <img id = "brr" src="gifs/loading.gif">
+            <!--        COLUMN2-->
+            <div class="col" style="width: 60vw; border: thin solid grey; border-radius: 2px; text-align: center">
+                <!--            MAP-->
+                <div id="stateMap" class="row" style="display: none">
+                    <img src="img/map.png" height = "450" width = "475">
+                </div>
+            </div>
+
+    </div>
+
+<!--    3RD ROW: ENACTED MAP, BRRRRRR GIF, AND SIMULATED MAPS-->
+    <div class="row" style="width: 100%; height: 35%">
+
+<!--        COLUMN1-->
+        <div class="col" style="width: 40%; height: 100%; border: thin solid grey; border-radius: 2px;">
+
+            <div class="row" style="height: 7%; text-align: center">
+
+                    <div class="row justify-content-center" style="display: block; background: white; text-align: center">
+                        <div id = "mapEnactedCollabel" class="col justify-content-center" style="display: block; text-align:center">
+                            <h5 id = "mapEnactedlabel"></h5>
+                        </div>
+                    </div>
+            </div>
+
+            <div class="row" style="height: 75%; text-align: center">
+                    <!--            ENACTED MAP-->
+                    <div id="mapEnactedcol" class="row" style="height: 75%; display: none">
+                        <div class="col justify-content-center" style="width: 100%; text-align: center">
+                            <img id="mapEnacted" height = "350" width="360" src="maps/AZ_enacted.png">
+                        </div>
+                    </div>
+            </div>
+
+
+
+            <!--            BUTTONS-->
+            <div id="simButtons" class="row" style="height: 8%; display: none; background: white">
+
+                <div class="row" style="display: block; text-align:center">
+                    <div class="buttons">
+                        <button class="add-samples-1" style="width: 15%"> Add 1 simulation</button>
+                        <button class="add-samples-3" style="width: 15%"> Add 3 simulations</button>
+                        <button class="add-samples-10" style="width: 15%"> Add 10 simulations</button>
+                        <button class="add-samples-30" style="width: 15%"> Add 30 simulations</button>
+                        <button class="add-samples-100" style="width: 15%"> Add 100 simulations</button>
+                    </div>
                 </div>
             </div>
         </div>
 
 <!--        COLUMN2-->
-        <div class="col" style="width: 45%; height: 100%; border: thin solid grey; border-radius: 2px; text-align: center">
-<!--            MAP-->
-            <div id="stateMap" class="row" style="display: none">
-                <img src="img/map.png" height = "350" width = "500">
-            </div>
-        </div>
-    </div>
+        <div class="col" style="width: 60%; height: 100%; border: thin solid grey; border-radius: 2px;">
 
-
-    <div class="row" style="width: 100%; height: 30%">
-
-<!--        COLUMN1-->
-        <div class="col" style="width: 55%; height: 100%; border: thin solid grey; border-radius: 2px;">
-            <!--            ENACTED MAP-->
-            <div id="mapEnactedcol" class="row" style="height: 80%; display: none">
-                <div class="col justify-content-center" style="width: 100%; text-align: center">
-                    <img id="mapEnacted" height = "320" src="maps/AZ_enacted.png">
-                </div>
-
-            </div>
-
-            <div class="row" style="display: block; height: 10%; background: white;">
-                <div id = "mapEnactedCollabel" class="col justify-content-center" style="width: 100%; display: block; text-align:center">
-                    <h6 id = "mapEnactedlabel"></h6>
+<!--            PLACEHOLDER FOR GIF AND SECOND SIMULATED MAP-->
+            <div class="row" style="width:100%; height: 50%; text-align: center">
+                <div id="map2col" class="row" style="height: 105%; display: none">
+                    <div class="col justify-content-center" style="width: 100%; text-align: center">
+                        <img id="map2" height = "230" width="230" src="img/blank.png">
+                    </div>
                 </div>
             </div>
-        </div>
 
-<!--        COLUMN2-->
-        <div class="col" style="width: 45%; height: 100%; border: thin solid grey; border-radius: 2px;">
+<!--            PLACEHOLDER FOR FIRST AND THIRD SIMULATED MAP-->
+            <div class="row" style="width: 100%; height: 45%; background: white; padding: 0;">
 
-<!--            MAPS-->
-            <div class="row" style="width: 100%; height: 80%; background: white; padding: 0;">
-
-                <div id = "map1col" class="col" style="height: 100%; width: 33%; display: none">
-                    <img id = "map1" height = "200" src="img/blank.png">
+                <div id = "map1col" class="col" style="height: 100%; width: 30%; display: none">
+                    <img id = "map1" height = "230" width = "230" src="img/blank.png">
                 </div>
-                <div id = "map2col" class="col" style="height: 100%; width: 34%; display: none">
-                    <img id = "map2" height = "200" src="img/blank.png">
+                <div id = "map2colBLANK" class="col" style="height: 50%; width: 30%; display: block">
+                    <img id = "map2BLANK" height = "150" width = "150" src="img/blank.png">
                 </div>
-                <div id = "map3col" class="col" style="height: 100%; width: 33%; display: none">
-                    <img id = "map3" height = "200" src="img/blank.png">
+                <div id = "map3col" class="col" style="height: 100%; width: 40%; display: none">
+                    <img id = "map3" height = "230" width = "230" src="img/blank.png">
                 </div>
             </div>
 
 <!--            MAP LABELS-->
-            <div class="row" style="height: 20%; display: block; background: white;">
+            <div class="row" style="height: 5%; display: block; background: white;">
                 <div id = "mapSimCollabel" class="col justify-content-center" style="width: 100%; display: block; text-align:center">
-                    <h3 id = "simMapLabel"></h3>
+                    <h4 id = "simMapLabel"></h4>
                 </div>
             </div>
 
         </div>
     </div>
 
-
-    <div class="row" style="height: 20%">
+<!--    4TH ROW: BAR GRAPH-->
+    <div class="row" style="width: 100%; height: 15%">
         <div class="col" style="width: 100%; border: thin solid grey; border-radius: 2px;">
-<!--            BAR GRAPH-->
             <div class="row" style="height: 95%">
                 <div id="barGraph" style="width: 100%"></div>
             </div>
         </div>
     </div>
 
-
-    <div id="citingAlarm" class="row" style="height: 5%; display: none">
+<!--    5TH ROW: ACKNOWLEDGMENTS-->
+    <div id="citingAlarm" class="row" style="height: 10%; display: none">
         <div class="row">
             Simulation driven by the <a href="https://alarm-redist.github.io/redist/">ALARM Project's redist R package</a>
         </div>
