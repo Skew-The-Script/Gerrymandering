@@ -41,8 +41,8 @@ class BarVis {
 
         vis.svg.append("text")
             .style("font-size", "15px")
-            .attr("y", -50)
-            .attr("x", -250)
+            .attr("y", -30)
+            .attr("x", -200)
             .attr("dy", ".75em")
             .attr("transform", "rotate(-90)")
             .text("# of Simulations (# of maps)");
@@ -106,7 +106,7 @@ class BarVis {
 
         vis.svg.append("g")
             .attr("id", "barGraphYAxis")
-            .attr("transform", "translate(-10, 0)")
+            .attr("transform", "translate(10, 0)")
             .call(vis.y_axis);
 
         var bars = vis.svg.selectAll(".bar")

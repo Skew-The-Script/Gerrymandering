@@ -131,10 +131,14 @@ let mapEnactedelement = document.getElementById("mapEnacted");
 
 // text element (change the text depending on the simulation run)
 let simMapLabel = document.getElementById("simMapLabel");
+let sim1MapLabel = document.getElementById("simMap1Label");
+let sim2MapLabel = document.getElementById("simMap2Label");
+let sim3MapLabel = document.getElementById("simMap3Label");
 let mapEnactedLabel = document.getElementById("mapEnactedlabel");
 let mapEnactedNumDist = document.getElementById("mapEnactedNumDist");
 let mapEnactedNumDem = document.getElementById("mapEnactedNumDem");
 
+let currentSimResults;
 // div elements (to turn the html block on/off in the doctree)
 let loadingColelement = document.getElementById("loadingCol");
 // let stateMapelement = document.getElementById("stateMap");
@@ -267,7 +271,7 @@ function updateState(){
             .then(function (data) {
                 let j = stateDropdownSelect.selectedIndex - 1;
                 let simulationResults = getNumDemDistricts(j, data[j]);
-
+                currentSimResults = simulationResults;
                 if (myBarGraph == null){
 
                     let numDistricts = stateInfo[j]['nDist'];
@@ -296,6 +300,9 @@ function finishUpdateState(simulationResults){
     map2colelement.style.display = "none";
     map3colelement.style.display = "none";
     simMapLabel.innerText = "";
+    sim1MapLabel.innerText = "";
+    sim2MapLabel.innerText = "";
+    sim3MapLabel.innerText = "";
 
 
     mapEnactedLabel.innerText = "Actual " + currentState + " Map";
@@ -333,6 +340,9 @@ $('.statesDropdown').on('change',function(){updateState();});
 function beginAddingSamples(n){
 
     simMapLabel.innerText = "";
+    sim1MapLabel.innerText = "";
+    sim2MapLabel.innerText = "";
+    sim3MapLabel.innerText = "";
 
     map1colelement.style.display = "block";
     map2colelement.style.display = "block";
@@ -404,6 +414,7 @@ function finishAddingSamples(n, animTime){
                 delay((i+1) * animTime).then(() => {
                     map1element.src = "maps/" + currentAbbr + "_draw_"+(rand+2).toString()+".png";
                     map1colelement.style.display = "block";
+                    sim1MapLabel.innerText = "# Dem Districts: " + currentSimResults[rand];
                 });
             }
             else if (i == 1){
@@ -413,12 +424,14 @@ function finishAddingSamples(n, animTime){
                     map2element.width = 300;
                     map2element.src = "maps/" + currentAbbr + "_draw_"+(rand+2).toString()+".png";
                     map2colelement.style.display = "block";
+                    sim2MapLabel.innerText = "# Dem Districts: " + currentSimResults[rand];
                 });
             }
             else if (i == 2){
                 delay((i+1) * animTime).then(() => {
                     map3colelement.style.display = "block";
                     map3element.src = "maps/" + currentAbbr + "_draw_"+(rand+2).toString()+".png";
+                    sim3MapLabel.innerText = "# Dem Districts: " + currentSimResults[rand];
                 });
             }
         }
@@ -432,6 +445,7 @@ function finishAddingSamples(n, animTime){
             // map3element.src = "img/blank.png";
             // display single simulated map
             map2element.src = "maps/" + currentAbbr + "_draw_"+(validMapRandomInts[0]+2).toString()+".png";
+            sim2MapLabel.innerText = "# Dem Districts: " + (validMapRandomInts[0]+2).toString();
             map2element.height = 300;
             map2element.width = 300;
             simMapLabel.innerText = "Simulated Map";
@@ -452,6 +466,10 @@ function finishAddingSamples(n, animTime){
             map1element.src = "maps/" + currentAbbr + "_draw_"+(validMapRandomInts[0]+2).toString()+".png";
             map2element.src = "maps/" + currentAbbr + "_draw_"+(validMapRandomInts[1]+2).toString()+".png";
             map3element.src = "maps/" + currentAbbr + "_draw_"+(validMapRandomInts[2]+2).toString()+".png";
+
+            sim1MapLabel.innerText = "# Dem Districts: " + (validMapRandomInts[0]+2).toString();
+            sim2MapLabel.innerText = "# Dem Districts: " + (validMapRandomInts[1]+2).toString();
+            sim3MapLabel.innerText = "# Dem Districts: " + (validMapRandomInts[2]+2).toString();
 
             map1colelement.style.display = "block";
             map3colelement.style.display = "block";
