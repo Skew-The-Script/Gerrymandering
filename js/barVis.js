@@ -118,20 +118,15 @@ class BarVis {
             .transition()
             .attr("x", function(d, i){
                 let _x = vis.x(i) - Math.sqrt(vis.width/(vis.numDistricts - 1));
-                console.log("N: " + vis.numDistricts);
-                console.log("W: " + vis.width);
-                console.log("X: " + _x);
                 return _x;
             })
             .attr("y", function(d, i){return vis.y(d);})
             .attr("width", 2*Math.sqrt(vis.width/(vis.numDistricts - 1)))
             .attr("height", function(d, i){
                 if (vis.newState){
-                    console.log("ding");
                     return 0;
                 }
                 else{
-                    console.log("dong");
                     return vis.height - vis.y(d);
                 }
             });

@@ -445,7 +445,7 @@ function finishAddingSamples(n, animTime){
             // map3element.src = "img/blank.png";
             // display single simulated map
             map2element.src = "maps/" + currentAbbr + "_draw_"+(validMapRandomInts[0]+2).toString()+".png";
-            sim2MapLabel.innerText = "# Dem Districts: " + (validMapRandomInts[0]+2).toString();
+            sim2MapLabel.innerText = "# Dem Districts: " + currentSimResults[validMapRandomInts[0]];
             map2element.height = 300;
             map2element.width = 300;
             simMapLabel.innerText = "Simulated Map";
@@ -467,9 +467,9 @@ function finishAddingSamples(n, animTime){
             map2element.src = "maps/" + currentAbbr + "_draw_"+(validMapRandomInts[1]+2).toString()+".png";
             map3element.src = "maps/" + currentAbbr + "_draw_"+(validMapRandomInts[2]+2).toString()+".png";
 
-            sim1MapLabel.innerText = "# Dem Districts: " + (validMapRandomInts[0]+2).toString();
-            sim2MapLabel.innerText = "# Dem Districts: " + (validMapRandomInts[1]+2).toString();
-            sim3MapLabel.innerText = "# Dem Districts: " + (validMapRandomInts[2]+2).toString();
+            sim1MapLabel.innerText = "# Dem Districts: " + currentSimResults[validMapRandomInts[0]];
+            sim2MapLabel.innerText = "# Dem Districts: " + currentSimResults[validMapRandomInts[1]];
+            sim3MapLabel.innerText = "# Dem Districts: " + currentSimResults[validMapRandomInts[2]];
 
             map1colelement.style.display = "block";
             map3colelement.style.display = "block";
