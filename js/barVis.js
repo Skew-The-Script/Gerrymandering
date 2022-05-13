@@ -3,7 +3,7 @@ class BarVis {
     constructor(parentElement, data, numDistricts, actualNumDem) {
         this.parentElement = parentElement;
         this.data = data;
-        console.log(data.length + "datapoints");
+        // console.log(data.length + "datapoints");
         this.rownums = [];
         this.displayData = null;
         this.numDistricts = numDistricts;
@@ -42,7 +42,7 @@ class BarVis {
         vis.svg.append("text")
             .style("font-size", "15px")
             .attr("y", -50)
-            .attr("x", -170)
+            .attr("x", -250)
             .attr("dy", ".75em")
             .attr("transform", "rotate(-90)")
             .text("# of Simulations (# of maps)");
@@ -116,13 +116,24 @@ class BarVis {
             .attr("class", "bar")
             .merge(bars)
             .transition()
-            .attr("x", function(d, i){return vis.x(i) - Math.sqrt(vis.width/(vis.numDistricts - 1));})
+            .attr("x", function(d, i){
+                let _x = vis.x(i) - Math.sqrt(vis.width/(vis.numDistricts - 1));
+                console.log("N: " + vis.numDistricts);
+                console.log("W: " + vis.width);
+                console.log("X: " + _x);
+                return _x;
+            })
             .attr("y", function(d, i){return vis.y(d);})
             .attr("width", 2*Math.sqrt(vis.width/(vis.numDistricts - 1)))
             .attr("height", function(d, i){
-                if (vis.newState){ return 0; }
+                if (vis.newState){
+                    console.log("ding");
+                    return 0;
+                }
                 else{
-                    return vis.height - vis.y(d); }
+                    console.log("dong");
+                    return vis.height - vis.y(d);
+                }
             });
 
         bars.exit().remove();

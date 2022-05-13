@@ -1,0 +1,149 @@
+html, body {
+    height: 100vh;
+}
+
+.container-fluid {
+    height: 100vh;
+}
+
+.tooltip {
+    position: absolute;
+    text-align: center;
+    width: 200px;
+    height: 28px;
+    padding: 2px;
+    font: 12px sans-serif;
+    background: lightsteelblue;
+    border-radius: 8px;
+}
+
+#carousel-container {
+    height: 100vh;
+    width: 90%;
+    margin-top:0vh;
+    margin-left:10vh;
+ }
+
+.headline{
+    font-size: 60px;
+    -webkit-text-fill-color: black;
+}
+
+h1{
+    text-align: center;
+    font-weight: bold;
+    font-size: 80px;
+    -webkit-text-fill-color: white;
+}
+
+body{
+    background-color: #ffffff;
+}
+
+.align-self-right{
+    text-align: right;
+    font-size: 20px;
+    -webkit-text-fill-color: white;
+}
+
+.bigtext{
+    font-size: 20px;
+}
+
+.carousel-caption{
+    background-color: dimgrey;
+    opacity: 0.8;
+    max-width: 80%;
+    width: 80%;
+    left: 10%;
+}
+
+.carousel-caption p{
+    margin: 5px;
+}
+
+.table {
+    font-size: 0.7em;
+}
+
+.title {
+    font-size: 20px;
+}
+
+.label {
+    text-align: end;
+    font-size: 12px;
+}
+
+#first {
+    background-image: url("../img/gerry_hand_darkened.png");
+    background-size: cover;
+    color:white;
+}
+
+#first h2 {
+    /*-webkit-text-stroke-color:black;*/
+    -webkit-text-fill-color:white;
+    font-size: 75px;
+    -webkit-text-stroke-width:5px;
+}
+
+#first p {
+    /*-webkit-text-stroke-color:black;*/
+    -webkit-text-stroke-width:1px;
+    -webkit-text-fill-color:white;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.credits p{
+    /*-webkit-text-stroke-color:black;*/
+    -webkit-text-stroke-width:1px;
+    -webkit-text-fill-color:white;
+    font-size: 15px;
+    /*font-weight: bold;*/
+}
+
+/*#first a {*/
+/*    !*-webkit-text-stroke-color:black;*!*/
+/*    !*-webkit-text-stroke-width:1px;*!*/
+/*    -webkit-text-fill-color: #0095ff;*/
+/*    font-size: 20px;*/
+/*}*/
+
+.top-part {
+    height: 80vh;
+}
+
+.bottom-part {
+    height: 20vh;
+    padding: 30px;
+    text-align:center;
+}
+
+.bottom-part-left {
+    height: 20vh;
+    padding: 30px;
+    text-align:left;
+}
+
+.top-part-first {
+    height: 90vh;
+    text-align:center;
+}
+
+.bottom-part-first {
+    height: 10vh;
+    text-align:center;
+    font-weight: bold;
+}
+
+a {
+    color: white;
+    text-decoration: underline;
+    font-size: 15px;
+}
+
+button {
+    font-size: 10px;
+}
