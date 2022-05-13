@@ -1,5 +1,5 @@
 # Exploring Gerrymandering Through Simulation
-Applet by [Skew The Script](https://skewthescript.org/) (applet authors: Max Cembalest, Dashiell Young-Saver, and Chris Olsen)
+Applet by [Skew The Script](https://skewthescript.org/) (applet authors: Max Cembalest, Dashiell Young-Saver, and Chris Olsen) <br>
 Simulation powered by [ALARM redist](https://alarm-redist.github.io/redist/) (by Christopher Kenny & Cory McCartan)
 
 View and use the web applet here: [skew-the-script.github.io/Gerrymandering](https://skew-the-script.github.io/Gerrymandering/)
