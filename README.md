@@ -1,8 +1,8 @@
-# Exploring gerrymandering throuh simulation
+# Exploring Gerrymandering Through Simulation
 Applet by [Skew The Script](https://skewthescript.org/) (applet authors: Max Cembalest, Dashiell Young-Saver, and Chris Olsen)
 Simulation powered by [ALARM redist](https://alarm-redist.github.io/redist/) (by Christopher Kenny & Cory McCartan)
 
-View and use the web applet here: skew-the-script.github.io/Gerrymandering/
+View and use the web applet here: [skew-the-script.github.io/Gerrymandering](https://skew-the-script.github.io/Gerrymandering/)
 
 Our web applet uses simulation to find evidence of [gerrymandering](https://en.wikipedia.org/wiki/Gerrymandering) in state redistricting plans. The applet will be used in high school statistics classrooms as a part of the [Skew The Script curriculum](https://skewthescript.org/ap-stats-curriculum). The applet is currently in beta stage.
 
