@@ -1,7 +1,7 @@
 let myBarGraph = null;
 let currentState;
 let currentAbbr;
-let simResults = [];
+let currentSimResults;
 let stateInfo = [
     {   'name' : 'Arizona',
         'abbr' : 'AZ'
@@ -114,11 +114,10 @@ let stateInfo = [
 ];
 let numStates = stateInfo.length;
 
-
-new fullpage('#fullpage', {
-    anchors: ['page1', 'page2'],
-    sectionsColor: ['yellow', 'orange'],
-});
+// new fullpage('#fullpage', {
+//     anchors: ['page1', 'page2'],
+//     sectionsColor: ['yellow', 'orange'],
+// });
 
 //////////////////////////////////////////////////////////////////
 // access html elements
@@ -138,20 +137,13 @@ let mapEnactedLabel = document.getElementById("mapEnactedlabel");
 let mapEnactedNumDist = document.getElementById("mapEnactedNumDist");
 let mapEnactedNumDem = document.getElementById("mapEnactedNumDem");
 
-let currentSimResults;
+
 // div elements (to turn the html block on/off in the doctree)
 let loadingColelement = document.getElementById("loadingCol");
-// let stateMapelement = document.getElementById("stateMap");
 let map1colelement = document.getElementById("map1col");
 let map2colelement = document.getElementById("map2col");
 let map3colelement = document.getElementById("map3col");
-// let map2BLANKcolelement = document.getElementById("map2colBLANK");
-let mapEnactedcolelement = document.getElementById("mapEnactedcol");
-let mapEnactedcollabelelement = document.getElementById("mapEnactedCollabel");
 let stateDropdownSelect = document.getElementById('statesDropdown');
-// let dropdownLabel = document.getElementById("statesDropdownLabel");
-let simButtons = document.getElementById("simButtons");
-// let citationElement = document.getElementById("citingAlarm");
 
 //////////////////////////////////////////////////////////////////
 // process data
@@ -201,68 +193,9 @@ function getNumDemDistricts(stateIndex, data){
 delay(5000).then(() => {
     loadingColelement.style.display = "none";
     stateDropdownSelect.style.display = "block";
-    // let blankData = [];
-    // for (let i = 0; i < 5000; i++){blankData.push(1)}
-
-    // dropdownLabel.style.display = "block";
 });
-// Promise.
-
-//
-// Promise.all(promises)
-//     .then(function (data) {
-//         for (let j = 0; j < numStates; j++){
-//             // console.log(stateInfo[j]['name']);
-//             let simRes = getNumDemDistricts(j, data[j]);
-//             simResults.push(simRes);
-//             console.log(stateInfo[j]['name'] + simRes);
-//         }
-//
-//         //first state results
-//         let simulationResults = simResults[0];
-//         let numDistricts = stateInfo[0]['nDist'];
-//         let actualNum = stateInfo[0]['nDem'];
-//         currentState = stateInfo[0]['name'];
-//         currentAbbr = stateInfo[0]['abbr'];
-//
-//         // initialize bar graph
-//         myBarGraph = new BarVis('barGraph', simulationResults, numDistricts, actualNum);
-//
-//         // reset images and labels
-//         // loadingColelement.style.display = "none";
-//         // simMapLabel.innerText = "";
-//         mapEnactedelement.src = "maps/"+currentAbbr+"_enacted.png";
-//         mapEnactedLabel.innerText = "Actual " + currentState + " Map";
-//         // barGraphXLabelCol.innerText = "Number of Democrat-Leaning Districts (within each map)";
-//
-//         // activate UI elements for maps, dropdown menu, and simulation buttons
-//         // stateMapelement.style.display = "block";
-//         // map1colelement.style.display = "block";
-//         // map2colelement.style.display = "block";
-//         // map3colelement.style.display = "block";
-//         // mapEnactedcolelement.style.display = "block";
-//         // mapEnactedcollabelelement.style.display = "block";
-//         // stateDropdownSelect.style.display = "block";
-//         // dropdownLabel.style.display = "block";
-//         // simButtons.style.display = "block";
-//         // citationElement.style.display = "block";
-//     })
-//     .catch(function (err) {
-//         console.log(err)
-//     });
-
-////////////////////////////////////////////////////////////////
-// respond to state dropdown menu
-
-// function getStateIndex(state){
-//     for (let i = 0; i < numStates; i++){
-//         if (stateInfo[i]['name'] == state){ return i; }
-//     }
-//     return -1;
-// }
 
 function updateState(){
-
 
     // get state from dropdown
     currentState = stateDropdownSelect.options[stateDropdownSelect.selectedIndex].text;
@@ -278,27 +211,19 @@ function updateState(){
                     let actualNum = stateInfo[j]['nDem'];
                     myBarGraph = new BarVis('barGraph', simulationResults, numDistricts, actualNum);
                 }
-
-                // console.log(currentState, simulationResults);
                 finishUpdateState(simulationResults);
-                // loadingColelement.style.display = "none";
             });
     }
-    // loadingColelement.style.display = "block";
-
-
 }
 
 function finishUpdateState(simulationResults){
     fullpage_api.moveSectionDown();
 
     // set simulation maps blank
-    // map1element.src = "img/blank.png";
-    // map2element.src = "img/blank.png";
-    // map3element.src = "img/blank.png";
     map1colelement.style.display = "none";
     map2colelement.style.display = "none";
     map3colelement.style.display = "none";
+    // simMapLabelCol.style.display = "none";
     simMapLabel.innerText = "";
     sim1MapLabel.innerText = "";
     sim2MapLabel.innerText = "";
@@ -314,7 +239,6 @@ function finishUpdateState(simulationResults){
     mapEnactedelement.src = "maps/"+currentAbbr+"_enacted.png";
 
     // reset bar graph
-    // let simulationResults = simResults[stateIndex];
     let numDistricts = stateInfo[stateIndex]['nDist'];
     let actualNum = stateInfo[stateIndex]['nDem'];
 
@@ -339,6 +263,7 @@ $('.statesDropdown').on('change',function(){updateState();});
 
 function beginAddingSamples(n){
 
+    // simMapLabelCol.style.display = "none";
     simMapLabel.innerText = "";
     sim1MapLabel.innerText = "";
     sim2MapLabel.innerText = "";
@@ -441,8 +366,6 @@ function finishAddingSamples(n, animTime){
     delay(n*animTime).then(() => {
 
         if (n == 1){
-            // map3colelement.style.display = "block";
-            // map3element.src = "img/blank.png";
             // display single simulated map
             map2element.src = "maps/" + currentAbbr + "_draw_"+(validMapRandomInts[0]+2).toString()+".png";
             sim2MapLabel.innerText = "# Dem Districts: " + currentSimResults[validMapRandomInts[0]];
@@ -476,6 +399,8 @@ function finishAddingSamples(n, animTime){
             // map2BLANKcolelement.style.display = "block";
             simMapLabel.innerText = "Last 3 Simulated Maps";
         }
+
+        // simMapLabelCol.style.display = "block";
     });
 }
 
