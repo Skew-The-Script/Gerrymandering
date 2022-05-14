@@ -112,8 +112,6 @@ let stateInfo = [
         'abbr' : 'WI'
     }
 ];
-let numStates = stateInfo.length;
-
 
 //////////////////////////////////////////////////////////////////
 // access html elements
@@ -131,8 +129,6 @@ let sim2MapLabel = document.getElementById("simMap2Label");
 let sim3MapLabel = document.getElementById("simMap3Label");
 let mapEnactedLabel = document.getElementById("mapEnactedlabel");
 let mapEnactedNumDist = document.getElementById("mapEnactedNumDist");
-let mapEnactedNumDem = document.getElementById("mapEnactedNumDem");
-
 
 // div elements (to turn the html block on/off in the doctree)
 let loadingColelement = document.getElementById("loadingCol");
@@ -145,12 +141,6 @@ let simButtons = document.getElementById('simButtons');
 //////////////////////////////////////////////////////////////////
 // process data
 
-// let promises = [];
-// for (let i = 0; i < numStates; i++){
-//     let abbr = stateInfo[i]['abbr'];
-//     promises.push(d3.csv("data/"+abbr+"_cd_2020_stats.csv", row =>processRow(row)));
-// }
-
 function processRow(row){
     row.ndshare = +row.ndshare;
     let res = {
@@ -161,7 +151,6 @@ function processRow(row){
 }
 
 function getNumDemDistricts(stateIndex, data){
-    console.log(data);
     let newData = [];
     let x = 0;
     let _numDistricts = 0;
@@ -188,11 +177,6 @@ function getNumDemDistricts(stateIndex, data){
     return newData;
 }
 
-// delay(5000).then(() => {
-//     loadingColelement.style.display = "none";
-//     stateDropdownSelect.style.display = "block";
-// });
-
 function updateState(){
 
     loadingColelement.style.display = "block";
@@ -204,20 +188,15 @@ function updateState(){
     if (currentState != ""){
 
         let j = stateDropdownSelect.selectedIndex - 1;
-        console.log(j);
         let abbr = stateInfo[j]['abbr'];
-        console.log(abbr);
         let promises = [];
         promises.push(d3.csv("data/"+abbr+"_cd_2020_stats.csv", row =>processRow(row)));
 
         Promise.all(promises)
             .then(function (data) {
-                console.log(data);
                 let j = stateDropdownSelect.selectedIndex - 1;
-                console.log(j);
                 let simulationResults = getNumDemDistricts(j, data[0]);
                 currentSimResults = simulationResults;
-                console.log(currentSimResults);
                 if (myBarGraph == null){
                     let numDistricts = stateInfo[j]['nDist'];
                     let actualNum = stateInfo[j]['nDem'];
@@ -235,12 +214,10 @@ function finishUpdateState(simulationResults){
     map1colelement.style.display = "none";
     map2colelement.style.display = "none";
     map3colelement.style.display = "none";
-    // simMapLabelCol.style.display = "none";
     simMapLabel.innerText = "";
     sim1MapLabel.innerText = "";
     sim2MapLabel.innerText = "";
     sim3MapLabel.innerText = "";
-
 
     mapEnactedLabel.innerText = "Actual " + currentState + " Map";
     let stateIndex = stateDropdownSelect.selectedIndex - 1;
@@ -255,9 +232,6 @@ function finishUpdateState(simulationResults){
     let actualNum = stateInfo[stateIndex]['nDem'];
 
     mapEnactedNumDist.innerHTML = "Total districts: " + numDistricts.toString().bold() + " &nbsp; | &nbsp; Democrat-leaning districts: " + actualNum.toString().bold();
-
-    // mapEnactedNumDem.innerText = "Number of Democrat-leaning districts: " + actualNum;
-
 
     myBarGraph.changeState(simulationResults, numDistricts, actualNum);
 
@@ -279,7 +253,6 @@ $('.statesDropdown').on('change',function(){updateState();});
 
 function beginAddingSamples(n){
 
-    // simMapLabelCol.style.display = "none";
     simMapLabel.innerText = "";
     sim1MapLabel.innerText = "";
     sim2MapLabel.innerText = "";
@@ -290,39 +263,27 @@ function beginAddingSamples(n){
     map3colelement.style.display = "block";
     map1element.src = "img/blank.png";
     map3element.src = "img/blank.png";
-    // map3colelement.style.display = "none";
-    // map2BLANKcolelement.style.display = "none";
 
     // set proper gif using current state and # samples being added
     let animTime = 0;
     if (n == 1){
         map2element.src = "gifs/running_sim_text_slow.gif";
-        // map2element.width = 300;
-        // map2element.height = 100;
         animTime = 1000;
     }
     else if (n == 3){
         map2element.src = "gifs/running_sim_text_fast.gif";
-        // map2element.width = 300;
-        // map2element.height = 100;
         animTime = 500;
     }
     else if (n == 10){
         map2element.src = "gifs/"+currentAbbr+"_slow.gif";
-        // map2element.width = 300;
-        // map2element.height = 300;
         animTime = 300;
     }
     else if (n == 30){
         map2element.src = "gifs/"+currentAbbr+"_medium.gif";
-        // map2element.width = 300;
-        // map2element.height = 300;
         animTime = 100;
     }
     else if (n == 100){
         map2element.src = "gifs/"+currentAbbr+"_fast.gif";
-        // map2element.width = 300;
-        // map2element.height = 300;
         animTime = 50;
     }
     finishAddingSamples(n, animTime);
@@ -361,8 +322,6 @@ function finishAddingSamples(n, animTime){
             else if (i == 1){
                 delay((i+1) * animTime).then(() => {
                     map2colelement.style.display = "none";
-                    // map2element.height = 300;
-                    // map2element.width = 300;
                     map2element.src = "maps/" + currentAbbr + "_draw_"+(rand+2).toString()+".png";
                     map2colelement.style.display = "block";
                     sim2MapLabel.innerText = "# Dem Districts: " + currentSimResults[rand];
@@ -385,22 +344,14 @@ function finishAddingSamples(n, animTime){
             // display single simulated map
             map2element.src = "maps/" + currentAbbr + "_draw_"+(validMapRandomInts[0]+2).toString()+".png";
             sim2MapLabel.innerText = "# Dem Districts: " + currentSimResults[validMapRandomInts[0]];
-            // map2element.height = 300;
-            // map2element.width = 300;
             simMapLabel.innerText = "Simulated Map";
         }
         else if (n == 3){
-
-            // map2BLANKcolelement.style.display = "block";
             map1colelement.style.display = "block";
             map3colelement.style.display = "block";
             simMapLabel.innerText = "Simulated Maps";
         }
         else if (n > 3){
-
-            // map2element.height = 300;
-            // map2element.width = 300;
-
             // display three simulated maps
             map1element.src = "maps/" + currentAbbr + "_draw_"+(validMapRandomInts[0]+2).toString()+".png";
             map2element.src = "maps/" + currentAbbr + "_draw_"+(validMapRandomInts[1]+2).toString()+".png";
@@ -412,11 +363,8 @@ function finishAddingSamples(n, animTime){
 
             map1colelement.style.display = "block";
             map3colelement.style.display = "block";
-            // map2BLANKcolelement.style.display = "block";
             simMapLabel.innerText = "Last 3 Simulated Maps";
         }
-
-        // simMapLabelCol.style.display = "block";
     });
 }
 
