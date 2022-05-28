@@ -46,21 +46,10 @@
                                 </div>
 
 
-                                <div class="row d-flex align-items-center">
-                                    <div class="col-3 justify-content-center">
-                                    </div>
-                                    <div id = "loadingCol" class="col-6 justify-content-center" style="display:none;">
-                                        <img id = "loading" src="gifs/loading_transparent.gif" style="width:100%">
-                                    </div>
-                                    <div class="col-3 justify-content-center">
-                                    </div>
-                                </div>
-
-
                                 <div class="row justify-content-center">
                                     <div class="col-4">
                                     </div>
-                                    <div class="col-4 align-items-center">
+                                    <div class="col-4 justify-content-center">
                                         <select class="statesDropdown" id="statesDropdown">
                                             <option value="">Choose a state:</option>
                                             <option value="Arizona">Arizona</option>
@@ -105,6 +94,20 @@
                                     </div>
                                 </div>
 
+
+                                <div class="row d-flex align-items-center">
+                                    <div class="col-3 justify-content-center">
+                                    </div>
+                                    <div id = "loadingCol" class="col-6 justify-content-center" style="display:none;">
+                                        <img id = "loading" src="gifs/loading_transparent.gif" style="width:100%">
+                                    </div>
+                                    <div class="col-3 justify-content-center">
+                                    </div>
+                                </div>
+
+
+
+
                             </div>
 
 
@@ -145,10 +148,17 @@
                                     <div class="row d-flex justify-content-center" style="border: thin solid grey; border-radius: 5px; background-color: #dcdcdc">
 
 
-                                        <!--                                    ENACTED MAP LABEL-->
-                                        <div id = "mapEnactedCollabel" class="col justify-content-center" style="display: block; text-align:center">
-                                            <h5 id = "mapEnactedlabel"></h5>
+                                        <div class="col">
+                                            <div class="row d-flex justify-content-center">
+                                                <!--                                    ENACTED MAP LABEL-->
+                                                <div id = "mapEnactedCollabel" class="col justify-content-center" style="display: block; text-align:center">
+                                                    <h5 id = "mapEnactedlabel"></h5>
+                                                </div>
+                                                <button class="change-state">change state</button>
+                                            </div>
                                         </div>
+
+
 
 
                                         <!--                                    ENACTED MAP-->
@@ -167,11 +177,11 @@
                                         <div id="simButtons" class="row" style="display: none">
                                             <div class="row" style="display: block; text-align:center">
                                                 <div class="buttons">
-                                                    <button class="add-samples-1"> Add 1 simulation</button>
-                                                    <button class="add-samples-3"> Add 3 simulations</button>
-                                                    <button class="add-samples-10"> Add 10 simulations</button>
-                                                    <button class="add-samples-30"> Add 30 simulations</button>
-                                                    <button class="add-samples-100"> Add 100 simulations</button>
+                                                    <button class="add-samples-1"> Add 1 sample</button>
+                                                    <button class="add-samples-3"> Add 3 samples</button>
+                                                    <button class="add-samples-10"> Add 10 samples</button>
+                                                    <button class="add-samples-30"> Add 30 samples</button>
+                                                    <button class="add-samples-100"> Add 100 samples</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -273,7 +283,7 @@
 <    Load JS libraries     >
 <- - - - - - - - - - - - -->
 
-    
+
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>

@@ -180,7 +180,7 @@ function getNumDemDistricts(stateIndex, data){
 function updateState(){
 
     loadingColelement.style.display = "block";
-    stateDropdownSelect.style.display = "none";
+    // stateDropdownSelect.style.display = "none";
 
     // get state from dropdown
     currentState = stateDropdownSelect.options[stateDropdownSelect.selectedIndex].text;
@@ -205,6 +205,11 @@ function updateState(){
                 finishUpdateState(simulationResults);
             });
     }
+}
+
+$('.change-state').on('click',function(){changeState();});
+function changeState(){
+    fullpage_api.moveSectionUp();
 }
 
 function finishUpdateState(simulationResults){
@@ -236,7 +241,7 @@ function finishUpdateState(simulationResults){
     myBarGraph.changeState(simulationResults, numDistricts, actualNum);
 
     loadingColelement.style.display = "none";
-    stateDropdownSelect.style.display = "block";
+    // stateDropdownSelect.style.display = "block";
     simButtons.style.display = "block";
 }
 
