@@ -3,7 +3,6 @@ class BarVis {
     constructor(parentElement, data, numDistricts, actualNumDem) {
         this.parentElement = parentElement;
         this.data = data;
-        // console.log(data.length + "datapoints");
         this.rownums = [];
         this.displayData = null;
         this.numDistricts = numDistricts;

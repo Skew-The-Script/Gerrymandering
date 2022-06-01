@@ -154,7 +154,7 @@
                                                 <div id = "mapEnactedCollabel" class="col justify-content-center" style="display: block; text-align:center">
                                                     <h5 id = "mapEnactedlabel"></h5>
                                                 </div>
-                                                <button class="change-state">change state</button>
+<!--                                                <button class="change-state">change state</button>-->
                                             </div>
                                         </div>
 
@@ -168,9 +168,13 @@
                                             </div>
                                         </div>
 
-                                        <div id = "mapEnactedColNumDist" class="col justify-content-center" style="display: block; text-align:center">
-                                            <h6 id = "mapEnactedNumDist"></h6>
+                                        <div class="row">
+                                            <div id = "mapEnactedColNumDist" class="col justify-content-center" style="display: block; text-align:center">
+                                                <h6 id = "mapEnactedNumDist"></h6>
+                                            </div>
+
                                         </div>
+
 
 
                                         <!--                                    BUTTONS-->
@@ -294,10 +298,11 @@
 <script type="text/javascript">
     new fullpage('#fullpage', {
         //options here
-        autoScrolling:true,
+        autoScrolling: true,
         anchors:['firstPage', 'secondPage', 'thirdPage', 'fourthPage', 'fifthPage', 'sixthPage', 'seventhPage', 'eighthPage', 'ninthPage'],
         navigation: true,
-        navigationPosition: 'right'
+        navigationPosition: 'right',
+
     });
 
     //methods

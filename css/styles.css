@@ -1,5 +1,10 @@
-html, body {
+body {
     height: 100vh;
+}
+
+html {
+    height: 100vh;
+    overflow-y:scroll;
 }
 
 .container-fluid {
@@ -157,6 +162,10 @@ a {
 button {
     font-size: 10px;
     max-width: 15%;
+}
+
+.change-state {
+    max-width: 50%;
 }
 
 #mapEnacted {
