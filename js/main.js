@@ -3,6 +3,9 @@ let currentState;
 let currentAbbr;
 let currentSimResults;
 let stateInfo = [
+    {   'name' : 'Alabama',
+        'abbr' : 'AL'
+    },
     {   'name' : 'Arizona',
         'abbr' : 'AZ'
     },
@@ -17,6 +20,9 @@ let stateInfo = [
     },
     {   'name' : 'Connecticut',
         'abbr' : 'CT'
+    },
+    {   'name' : 'Florida',
+        'abbr' : 'FL'
     },
     {   'name' : 'Georgia',
         'abbr' : 'GA'
@@ -39,6 +45,12 @@ let stateInfo = [
     {   'name' : 'Kansas',
         'abbr' : 'KS'
     },
+    {   'name' : 'Kentucky',
+        'abbr' : 'KY'
+    },
+    {   'name' : 'Louisiana',
+        'abbr' : 'LA'
+    },
     {   'name' : 'Maine',
         'abbr' : 'ME'
     },
@@ -57,6 +69,9 @@ let stateInfo = [
     {   'name' : 'Mississippi',
         'abbr' : 'MS'
     },
+    {   'name' : 'Missouri',
+        'abbr' : 'MO'
+    },
     {   'name' : 'Montana',
         'abbr' : 'MT'
     },
@@ -65,6 +80,9 @@ let stateInfo = [
     },
     {   'name' : 'Nevada',
         'abbr' : 'NV'
+    },
+    {   'name' : 'New Hampshire',
+        'abbr' : 'NH'
     },
     {   'name' : 'New Jersey',
         'abbr' : 'NJ'
@@ -78,6 +96,9 @@ let stateInfo = [
     {   'name' : 'North Carolina',
         'abbr' : 'NC'
     },
+    {   'name' : 'Ohio',
+        'abbr' : 'OH'
+    },
     {   'name' : 'Oklahoma',
         'abbr' : 'OK'
     },
@@ -89,6 +110,9 @@ let stateInfo = [
     },
     {   'name' : 'Rhode Island',
         'abbr' : 'RI'
+    },
+    {   'name' : 'South Carolina',
+        'abbr' : 'SC'
     },
     {   'name' : 'Tennessee',
         'abbr' : 'TN'
