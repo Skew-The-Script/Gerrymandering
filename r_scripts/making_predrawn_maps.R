@@ -1,10 +1,13 @@
 # Libraries
+#Make sure to update before running by using: install.packages('redist')
 library(redist)
 library(ggplot2)
 library(readr)
+library(tidyverse)
+library(forcats)
 library(dplyr)
-#library(devtools)
-#devtools::install_github("alarm-redist/ggredist")
+library(devtools)
+# make sure to update before running buy using: devtools::install_github("alarm-redist/ggredist")
 library(ggredist)
 library(ggrepel)
 library(tigris)
@@ -14,9 +17,11 @@ library(scales)
 library(patchwork)
 library(here)
 
+sf::sf_use_s2(FALSE)
+
 
 ######################################
-##Plotting function from redist internal package: https://github.com/alarm-redist/alarm-redist.github.io/blob/52666eca2cc67a649170e7bb2ed0a26ee32bf1ed/_fifty-states/fifty-states.R
+##Plotting function from redist internal package: https://github.com/alarm-redist/alarm-redist.github.io/blob/main/_fifty-states/fifty-states.R
 ######################################
 
 PAL_COAST = c("#7BAEA0", "#386276", "#3A4332", "#7A7D6F", "#D9B96E", "#BED4F0")
@@ -128,14 +133,20 @@ plot_cds = function(map, pl, county, abbr, qty="plan", city=FALSE, coverage=TRUE
 
 
 ############################################
-#### Plotting based on redist template: https://github.com/alarm-redist/alarm-redist.github.io/blob/52666eca2cc67a649170e7bb2ed0a26ee32bf1ed/_fifty-states/template.Rmd#L44
+#### Plotting based on 'download_dataverse' function from: https://github.com/alarm-redist/alarm-redist.github.io/blob/main/_fifty-states/fifty-states.R
 ############################################
 
 #### Set to states you'd like to plot abbr
-#abbrs <- c("AR","AZ","CA","CO","CT","GA","HI","IA","ID","IL",
-##           "IN","KS","MA","MD","ME","MI","MN","MS","MT","NC",
-#           "NE","NJ","NM","NV","NY","OK","OR","PA","RI","TN",
-#           "TX","UT","VA","WA","WI","WV")
+abbrs <- c("AL","AR","AZ","CA","CO","CT","FL","GA","HI","IA","ID","IL",
+           "IN","KS","KY","LA","MA","MD","ME","MI","MN","MO","MS","MT","NC",
+           "NE","NH","NJ","NM","NV","NY","OH","OK","OR","PA","RI","SC","TN",
+           "TX","UT","VA","WA","WI","WV")
+
+#### Set to states you'd like to plot abbr
+abbrs <- c("ID","IL",
+           "IN","KS","KY","LA","MA","MD","ME","MI","MN","MO","MS","MT","NC",
+           "NE","NH","NJ","NM","NV","NY","OH","OK","OR","PA","RI","SC","TN",
+           "TX","UT","VA","WA","WI","WV")
 
 
 ### Inner function to plot data for a state
@@ -143,16 +154,25 @@ plot_cds = function(map, pl, county, abbr, qty="plan", city=FALSE, coverage=TRUE
 # map, plans -> data files for state
 make_maps <- function(i, map, m, abbr){
   
+  # set coverage to false if Florida, as shown in render_state_page function in https://github.com/alarm-redist/alarm-redist.github.io/blob/main/_fifty-states/fifty-states.R
+  if (abbr == "FL"){
+    cover = FALSE
+  }
+  
+  else{
+    cover = TRUE
+  }
+  
   # plot enacted map
   if (i == 1){
-    enacted <- plot_cds(map, m[, i], county, abbr, "dem")
-    ggsave(enacted, file=here("maps",paste(abbr,"_enacted.png", sep = "")))
+    enacted <- plot_cds(map, m[, i], county, abbr, "dem", coverage = cover)
+    ggsave(enacted, file=here("../maps",paste(abbr,"_enacted.png", sep = "")))
   }
   
   # plot simulated map
   else {
-    plot_i <- plot_cds(map, m[, i], county, abbr, "dem")
-    ggsave(plot_i, file=here("maps",paste(abbr,"_draw_",i,".png", sep = "")))
+    plot_i <- plot_cds(map, m[, i], county, abbr, "dem", coverage = cover)
+    ggsave(plot_i, file=here("../maps",paste(abbr,"_draw_",i,".png", sep = "")))
   }
   
 }
@@ -163,16 +183,28 @@ make_maps <- function(i, map, m, abbr){
 # idxs: index of simulations to plot (an integer, with the except of the enacted map, which has index 'cd_2020')
 make_all_maps <- function(abbr, idx){
   
-  # gather data for state, source: https://github.com/alarm-redist/fifty-states
-  map <- read_rds(here("data",paste(abbr,"_cd_2020_map.rds", sep="")))
-  plans <- read_rds(here("data",paste(abbr,"_cd_2020_plans.rds", sep="")))
-  stats <- read.csv(here("data",paste(abbr,"_cd_2020_stats.csv", sep="")))
+  # gather data for state, source: part of 'download_dataverse' function from: https://github.com/alarm-redist/alarm-redist.github.io/blob/main/_fifty-states/fifty-states.R
+  map <- read_rds(here("../data",paste(abbr,"_cd_2020_map.rds", sep="")))
+  map$geometry = sf::st_make_valid(map$geometry) # make_valid stuff needed for FL and other states, as shown here: https://github.com/alarm-redist/alarm-redist.github.io/blob/main/_fifty-states/template.Rmd
+  map$geometry = sf::st_buffer(map$geometry, 0)
+  
+  
+  plans <- read_rds(here("../data",paste(abbr,"_cd_2020_plans.rds", sep="")))
+  if (is.ordered(plans$district))
+    plans$district = as.integer(plans$district)
+  if (is.character(plans$draw))
+    plans$draw = forcats::fct_inorder(plans$draw)
+  if ("pop_overlap" %in% names(plans))
+    plans$pop_overlap = NULL
+  #plans$district <- as.integer(plans$district)
+  
+  stats <- read.csv(here("../data",paste(abbr,"_cd_2020_stats.csv", sep="")))
   # stats$total_pop <- as.integer(stats$total_pop) # use this only for Wisconsin (WI)
   
   print(abbr)
   
   # set up data for mapping
-  state_plans <- left_join(plans, stats, by = c("draw","district","total_pop"))
+  state_plans <- left_join(plans, stats, by=c("draw", "district", "chain", "total_pop"))
   m <- as.matrix(state_plans)
   n_ref = redist:::get_n_ref(state_plans)
   N = ncol(m) - n_ref
@@ -204,9 +236,9 @@ lapply(abbrs, make_all_maps, idx = idxs)
 for (abbr in abbrs){
   
   # Data for state, source: https://github.com/alarm-redist/fifty-states
-  map <- read_rds(here("data",paste(abbr,"_cd_2020_map.rds", sep="")))
-  plans <- read_rds(here("data",paste(abbr,"_cd_2020_plans.rds", sep="")))
-  stats <- read.csv(here("data",paste(abbr,"_cd_2020_stats.csv", sep="")))
+  map <- read_rds(here("../data",paste(abbr,"_cd_2020_map.rds", sep="")))
+  plans <- read_rds(here("../data",paste(abbr,"_cd_2020_plans.rds", sep="")))
+  stats <- read.csv(here("../data",paste(abbr,"_cd_2020_stats.csv", sep="")))
   
   # set up data for mapping
   state_plans <- left_join(plans, stats, by = c("draw","district","total_pop"))
@@ -216,13 +248,13 @@ for (abbr in abbrs){
   
   # plot 2020 enacted plan
   enacted <- plot_cds(map, map$cd_2020, county, abbr, "dem")
-  ggsave(enacted, file=here("maps",paste(abbr,"_enacted.png", sep = "")))
+  ggsave(enacted, file=here("../maps",paste(abbr,"_enacted.png", sep = "")))
   
   # plot first 300 simulations (ignore first one, which is enacted map)
   idxs = 2:301
   for (i in idxs){
     plot_i <- plot_cds(map, m[, i], county, abbr, "dem")
-    ggsave(plot_i, file=here("maps",paste(abbr,"_draw_",i,".png", sep = "")))
+    ggsave(plot_i, file=here("../maps",paste(abbr,"_draw_",i,".png", sep = "")))
   }
   
 }

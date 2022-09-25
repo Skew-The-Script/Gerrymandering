@@ -1,0 +1,128 @@
+<h1 id="south-carolina-congressional-districts">2020 South Carolina
+Congressional Districts</h1>
+<h2 id="redistricting-requirements">Redistricting requirements</h2>
+<p>South Carolina has no state constitution or statute for
+redistricting. However, the state legislature committees do provide
+<em>guidelines</em> for redistricting. (<a
+href="https://redistricting.schouse.gov/docs/2021%20Redistricting%20Guidelines.pdf">House
+link</a>, <a
+href="https://redistricting.scsenate.gov/docs/Senate%20Redistricting%20Guidelines%20Adopted%209-17-21.DOCX">Senate
+link</a>), According to these guidelines, districts should:</p>
+<ol type="1">
+<li>be contiguous (including contiguity by water)</li>
+<li>have equal populations as is practicable</li>
+<li>comply with VRA Section 2</li>
+<li>be geographically compact</li>
+<li>preserve boundaries of counties, municipalities, voting tabulation
+districts, cores of previous districts, and other communities of
+interests as much as possible</li>
+<li>preserve separation of incumbents as much as possible</li>
+</ol>
+<p>The House guidelines state that if the criteria come into conflict,
+federal law (including the VRA) and population parity should be
+prioritized over others.</p>
+<h3 id="algorithmic-constraints">Algorithmic Constraints</h3>
+<p>We do not adhere to all criteria in the guidelines. We include the
+following constraints:</p>
+<ol type="1">
+<li>We enforce a maximum population deviation of 0.5%.</li>
+<li>We impose a hinge constraint on the Black Voting Age Population so
+that it encourages district BVAP of above 40%. Districts with BVAP of
+30% or less are not penalized as much. Together, these aim to ensure
+that Black voters can elect their candidate of choice in districts with
+high BVAP.</li>
+<li>We impose a municipality-split constraint to lower the number of
+municipality splits.</li>
+</ol>
+<h2 id="data-sources">Data Sources</h2>
+<p>Data for South Carolina comes from the ALARM Project’s <a
+href="https://alarm-redist.github.io/posts/2021-08-10-census-2020/">2020
+Redistricting Data Files</a>. The state’s new district lines come from
+<a
+href="https://redistricting.lls.edu/state/south-carolina/?cycle=2020&amp;level=Congress">All
+About Redistricting</a>.</p>
+<h2 id="pre-processing-notes">Pre-processing Notes</h2>
+<p>We take municipalities and concatenate them with counties in order to
+apply a constraint to avoid too many municipality splits.</p>
+<h2 id="simulation-notes">Simulation Notes</h2>
+<p>We sample 6,000 districting plans across two independent runs of the
+SMC algorithm. We set the population tempering at 0.05 to avoid
+bottlenecks. We then remove all plans that do not contain any district
+that has both a BVAP of over 30% and an average voteshare that is more
+Democratic than Republican. This remove occurs after verifying that such
+plans comprise less than 1% of the 6,000 plans. We then thin the sample
+down to exactly 5,000 plans.</p>
+<h2 id="contents">Contents</h2>
+<ul>
+<li><code>SC_cd_2020_stats.csv</code> contains summary statistics on the
+sampled redistricting plans</li>
+<li><code>SC_cd_2020_plans.rds</code> is a compressed
+<code>redist_plans</code> object, which contains the matrix of
+precinct/block assignments and may be used for further analysis.</li>
+<li><code>SC_cd_2020_map.rds</code> is a compressed
+<code>redist_map</code> object, which contains the precinct/block
+shapefile and demographic data.</li>
+</ul>
+<p>Both the <code>redist_plans</code> and <code>redist_map</code> object
+are intended to be used with the <a
+href="https://alarm-redist.github.io/redist/">redist package</a>.</p>
+<h3 id="codebook-for-summary-statistics">Codebook for summary
+statistics</h3>
+<ul>
+<li><code>draw</code>: unique identifier for each sample. Non-numeric
+draw names are real-world plans, e.g., <code>cd_2010</code> for an
+enacted 2010 plan.</li>
+<li><code>district</code>: a district identifier. District numbers
+roughly match those in the enacted plan, but the correspondence is not
+perfect.</li>
+<li><code>chain</code>: a number identifying the run of the
+redistricting algorithm used to produce this draw. Used for diagnostic
+purposes.</li>
+<li><code>pop_overlap</code>: a number indicating the fraction of people
+in this plan who reside in the same-numbered district in the enacted
+plan.</li>
+<li><code>total_pop</code>: the total population of each district.</li>
+<li><code>total_vap</code>: the total voting-aged population of each
+district.</li>
+<li><code>pop_*</code>, <code>vap_*</code>: total (voting-aged)
+population within racial and ethnic groups for each district. Variable
+codes documented <a
+href="https://github.com/alarm-redist/census-2020#data-format">here</a>.</li>
+<li><code>plan_dev</code>: the maximum population deviation among
+districts in the plan. Computed as
+<code>max(abs(distr_pop - target_pop)/target_pop)</code>.</li>
+<li><code>comp_edge</code>: compactness, as measured by the fraction of
+internal edges kept. Higher values indicate more compactness.</li>
+<li><code>comp_polsby</code>: compactness, as measured by the
+Polsby-Popper score. Higher values indicate more compactness.</li>
+<li><code>county_splits</code>: the number of counties which belong to
+more than one district.</li>
+<li><code>muni_splits</code>: the number of Census Designated Places
+which belong to more than one district.</li>
+<li><code>*_##_dem_*</code>, <code>*_##_rep_*</code>: vote counts for
+statewide Democratic and Republican candidates in a certain election.
+More information <a
+href="https://github.com/alarm-redist/census-2020#data-format">here</a>.</li>
+<li><code>adv_##</code>, <code>arv_##</code>: average vote counts for
+statewide Democratic and Republican candidates in a certain year. More
+information <a
+href="https://github.com/alarm-redist/census-2020#data-format">here</a>.</li>
+<li><code>ndv</code>, <code>nrv</code>: averages of the
+<code>adv_##</code> and <code>arv_##</code> variables across all
+available elections.</li>
+<li><code>ndshare</code>: normal Democratic share, computed as
+<code>ndv / (ndv + nrv)</code></li>
+<li><code>e_dvs</code>: average Democratic vote share, computed as the
+average of the Democratic vote share when first scored under each
+statewide election.</li>
+<li><code>pr_dem</code>: probability seat is represented by a Democrat;
+calculated as the fraction of statewide elections under which the
+district had a majority Democratic share.</li>
+<li><code>e_dem</code>: expected number of Democratic seats for the
+plan; equivalent to summing the <code>pr_dem</code> values across
+districts</li>
+<li><code>pbias</code>: partisan bias at 50% vote share, averaged across
+all available elections. Positive values indicate Republican bias.</li>
+<li><code>egap</code>: the efficiency gap, averaged across all available
+elections. Positive values indicate Republican bias.</li>
+</ul>

@@ -41,10 +41,10 @@ class BarVis {
         vis.svg.append("text")
             .style("font-size", "15px")
             .attr("y", -30)
-            .attr("x", -200)
+            .attr("x", -165)
             .attr("dy", ".75em")
             .attr("transform", "rotate(-90)")
-            .text("# of Simulations (# of maps)");
+            .text("# of Simulations (Maps)");
 
         vis.svg.append("text")
             .style("font-size", "15px")
